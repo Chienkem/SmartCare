@@ -7,13 +7,16 @@ import { TitleInput, ContentContainer, StatusTag, SearchInput, HeaderContent } f
 const { Option } = Select;
 
 function Customer(){
-
+//loading indicator
+const [loading,setLoading]= useState(false)
   // lấy dữ liệu từ server
-  const[dataService, setDataService] = useState([]);
+  const[dataCustomer, setDataCustomer] = useState([]);
   useEffect(() => {
-    axios.get('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/service_request')
+    setLoading(true)
+    axios.get('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/customers')
     .then(res => {
-      setDataService(res.data);
+      setLoading(false)
+      setDataCustomer(res.data);
     })
     .catch(err => {
       console.log(err);
@@ -29,8 +32,8 @@ function Customer(){
     },
     {
       title: 'Người dùng',
-      dataIndex: 'nameService',
-      key: 'nameService',
+      dataIndex: 'nameCustomer',
+      key: 'nameCustomer',
     },
     {
       title: 'Mã thiết bị',
@@ -87,11 +90,11 @@ function Customer(){
   ];
   
   //Lấy dữ liệu input từ form
-  const [serviceRequestData, setServiceRequestData] = useState({});
-  const handerChangeServiceRequestData = (e) => {
+  const [serviceRequestData, setCustomerRequestData] = useState({});
+  const handerChangeCustomerRequestData = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    setServiceRequestData({...serviceRequestData, [name]: value});
+    setCustomerRequestData({...serviceRequestData, [name]: value});
   }
 
   // Modal
@@ -103,9 +106,9 @@ function Customer(){
   //ok modal (thêm dữ liệu)
   const handleOk = () => {
     setIsModalVisible(false);
-    axios.post(`https://61e51bf0595afe00176e5310.mockapi.io/api/v1/service_request`, serviceRequestData)
+    axios.post(`https://61e51bf0595afe00176e5310.mockapi.io/api/v1/customers`, serviceRequestData)
     .then(res => {
-      setDataService(pre => [...pre, res.data]);
+      setDataCustomer(pre => [...pre, res.data]);
     })
     .catch(err => {
       console.log(err)
@@ -114,7 +117,7 @@ function Customer(){
   //cancel modal
   const handleCancel = () => {
     setIsModalVisible(false);
-    setServiceRequestData({});
+    setCustomerRequestData({});
   };
 
   // Xóa dữ liệu
@@ -123,9 +126,9 @@ function Customer(){
       title: 'Bạn có chắc chắn muốn xóa?',
       icon: <ExclamationCircleOutlined />,
       onOk() {
-        axios.delete('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/service_request/' + record.id)
+        axios.delete('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/customers' + record.id)
         .then(res => { 
-          setDataService(pre => pre.filter(item => item.id !== record.id)); 
+          setDataCustomer(pre => pre.filter(item => item.id !== record.id)); 
         })
       },
       onCancel() {
@@ -135,9 +138,9 @@ function Customer(){
   }
 
   const handlerSearch = (e) => {
-    axios.post('http://localhost:3001/service', serviceRequestData)
+    axios.post('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/customers', serviceRequestData)
     .then(res => {
-      setDataService(res.data);
+      setDataCustomer(res.data);
     })
   }
 
@@ -225,8 +228,9 @@ function Customer(){
       {/* bảng dữ liệu */}
       <Table
         columns={columns}
-        dataSource={dataService}
+        dataSource={dataCustomer}
         rowKey={record => record.id} 
+        loading={loading}
       />
 
       {/* Modal */}
@@ -236,8 +240,8 @@ function Customer(){
             <TitleInput>Họ và tên</TitleInput>
             <Input
               placeholder="Nguyễn Văn A"
-              name="nameService"
-              onChange={e => handerChangeServiceRequestData(e)}
+              name="nameCustomer"
+              onChange={e => handerChangeCustomerRequestData(e)}
             />
           </Col>
           <Col span={11}>
@@ -245,7 +249,7 @@ function Customer(){
             <Input
               name="phoneNumber"
               placeholder="0312345678"
-              onChange={e => handerChangeServiceRequestData(e)}
+              onChange={e => handerChangeCustomerRequestData(e)}
             />
           </Col>
           <Col span={11}>
@@ -253,7 +257,7 @@ function Customer(){
             <Input 
               name="province"
               placeholder="Hà Nội"
-              onChange={e => handerChangeServiceRequestData(e)}
+              onChange={e => handerChangeCustomerRequestData(e)}
             />
           </Col>
           <Col span={11}>
@@ -261,7 +265,7 @@ function Customer(){
             <Input
               name="district"
               placeholder="Hà Đông"
-              onChange={e => handerChangeServiceRequestData(e)}
+              onChange={e => handerChangeCustomerRequestData(e)}
             />
           </Col>
           <Col span={11}>
@@ -269,7 +273,7 @@ function Customer(){
             <Input
               name="ward"
               placeholder="Mộ Lao"
-              onChange={e => handerChangeServiceRequestData(e)}  
+              onChange={e => handerChangeCustomerRequestData(e)}  
             />
           </Col>
           <Col span={11}>
@@ -277,7 +281,7 @@ function Customer(){
             <Input
               name="address"
               placeholder="Ngõ 6, Nguyễn Văn Trỗi,..."
-              onChange={e => handerChangeServiceRequestData(e)}  
+              onChange={e => handerChangeCustomerRequestData(e)}  
             />
           </Col>
           <Col span={11}>
@@ -285,7 +289,7 @@ function Customer(){
             <Input
               name="deviceCode"
               placeholder="Ngõ 6, Nguyễn Văn Trỗi,..."
-              onChange={e => handerChangeServiceRequestData(e)}  
+              onChange={e => handerChangeCustomerRequestData(e)}  
             />
           </Col>
           <Col span={11}>
@@ -294,7 +298,7 @@ function Customer(){
               placeholder="Trạng thái"
               style={{ width:"100%" }}
               name="status"
-              onChange={e => setServiceRequestData({...serviceRequestData, status: e})}
+              onChange={e => setCustomerRequestData({...serviceRequestData, status: e})}
             >
               <Option value="complete">Hoàn thành</Option>
               <Option value="processing">Đang xử lý</Option>
@@ -302,29 +306,8 @@ function Customer(){
               <Option value="error">Lỗi</Option>
             </Select>
           </Col>
-          <Col span={11}>
-            <TitleInput>Ghi chú</TitleInput>
-            <Input
-              name="note"
-              placeholder="Ngõ 6, Nguyễn Văn Trỗi,..."
-              onChange={e => handerChangeServiceRequestData(e)}
-            />
-          </Col>
-          <Col span={11}>
-            <TitleInput>Loại dịch vụ</TitleInput>
-            <Select
-              placeholder="Chọn dịch vụ"
-              style={{ width:"100%" }}
-              name="deviceType"
-              onChange={e => setServiceRequestData({...serviceRequestData, deviceType: e})}
-            >
-              <Option value="Điều hòa">Điều hòa</Option>
-              <Option value="Máy lọc nước">Máy lọc nước</Option>
-              <Option value="Tủ lạnh">Tủ lạnh</Option>
-              <Option value="Bình nóng lạnh">Bình nóng lạnh</Option>
-              <Option value="Dịch vụ...">Dịch vụ...</Option>
-            </Select>
-          </Col>
+       
+        
         </Row>
       </Modal>
     </ContentContainer>

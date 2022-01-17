@@ -187,6 +187,9 @@ function ServiceReques(){
     })
   }
 
+  const [page,setPage] = useState(1)
+  const [pageSize,setPageSize] = useState(10)
+
 
   return(
     <ContentContainer >
@@ -247,6 +250,24 @@ function ServiceReques(){
         columns={columns}
         dataSource={dataService}
         rowKey={record => record.id} 
+        pagination={{
+          total: 100,
+          current: page,
+          pageSize: pageSize,
+          onChange: (page, pageSize) => {
+              setPage(page)
+              setPageSize(pageSize)
+            
+              // axios.get('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/service_request/${page}')
+              // .then(res => {
+              //   setDataService(res.data);
+              // })
+              // .catch(err => {
+              //   console.log(err);
+              // })
+              
+          }
+      }}
       />
 
       {/* Modal */}

@@ -11,6 +11,10 @@ import Employee from "../Employee";
 import Equipment from "../Equipment";
 import Service from "../Service";
 import Customer from './../Customer';
+import AirConditioner from "../AirConditioner";
+import ElectricWaterHeater from "../ElectricWaterHeater";
+import WaterFilter from "../WaterFilter";
+import Refrigerator from "../Refrigerator";
 
 const ContentContainer = styled.div`
  margin-top: 50px;
@@ -33,21 +37,25 @@ export const dashboardWithoutSidebarRoutes = [
         path: "/services/air_conditioner",
         name: "Điều hòa",
         icon: true,
+        component:AirConditioner
     },
     {
         path: "/services/water_filter",
         name: "Máy lọc nước",
         icon: true,
+        component: WaterFilter
     },
     {
         path: "/services/refrigerator",
         name: "Tủ lạnh",
         icon: true,
+        component:Refrigerator,
     },
     {
         path: "/services/electric_water_heater",
         name: "Bình nóng lạnh",
         icon: true,
+        component: ElectricWaterHeater
     },
     {
         path: "/services/other_services",
