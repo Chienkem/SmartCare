@@ -1,0 +1,24 @@
+{
+  "service": [
+    {
+      "nameService": "Phạm Hồng Sơn",
+      "phoneNumber": "12345678",
+      "province": "Hà Nội",
+      "district": "Hà Đông",
+      "ward": "Mộ Lao",
+      "address": "Ngõ 6, ....",
+      "deviceCode": "123232asas",
+      "status": "processing",
+      "note": "sscscscscsc",
+      "deviceType": "Máy lọc nước",
+      "id": 1
+    },
+    {
+      "deviceType": "Máy lọc nước",
+      "id": 2
+    }
+  ],
+  "province": [
+    "Hà Nội"
+  ]
+}
