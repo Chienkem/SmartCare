@@ -63,7 +63,7 @@ function Customer(){
       key: 'address',
     },
     {
-      title: 'Số điện thoại',
+      title: 'Số điện phone',
       dataIndex: 'phoneNumber',
       key: 'phoneNumber',
     },
