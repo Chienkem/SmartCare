@@ -94,7 +94,8 @@ function Sidebar(props){
 
             <SidebarItems>
                 {dashboardWithoutSidebarRoutes.map(({name, path, icon}, index) => (
-                    <SidebarItem 
+                    <SidebarItem
+                        key={index}
                         name={name}
                         to={path}
                         icon={icon}
