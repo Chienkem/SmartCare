@@ -78,6 +78,11 @@ function ServiceReques(){
       key: 'time',
     },
     {
+      title: 'Mã nhân viên xử lý',
+      dataIndex: 'employeeCode',
+      key: 'employeeCode',
+    },
+    {
       title: 'Trạng thái',
       key: 'status',
       dataIndex: 'status',
@@ -97,9 +102,6 @@ function ServiceReques(){
                 style={{ color: "#45A4FC" }}
                 onClick={() =>  {}}
               />
-              <DeleteOutlined
-                onClick={() => handerDelete(record)}
-                style={{ marginLeft: 10, color: "red" }} />
             </div>
           )
       }
@@ -136,23 +138,6 @@ function ServiceReques(){
     setIsModalVisible(false);
     setServiceRequestData({});
   };
-
-  // Xóa dữ liệu
-  const handerDelete = (record) => {
-    Modal.confirm({
-      title: 'Bạn có chắc chắn muốn xóa?',
-      icon: <ExclamationCircleOutlined />,
-      onOk() {
-        axios.delete('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/service_request/' + record.id)
-        .then(res => { 
-          setDataService(pre => pre.filter(item => item.id !== record.id)); 
-        })
-      },
-      onCancel() {
-        // console.log('Cancel');
-      },
-    });
-  }
 
   const handlerSearch = (e) => {
     axios.post('http://localhost:3001/service', serviceRequestData)

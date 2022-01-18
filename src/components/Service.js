@@ -192,13 +192,6 @@ function Service(){
 
   return(
     <ContentContainer >
-   <div style={{marginBottom:20}}>
-    <Button>Điều hòa</Button>
-    <Button>Máy Lọc Nước</Button>
-    <Button>Tủ lạnh</Button>
-    <Button>Bình nóng lạnh</Button>
-    <Button>Dịch vụ khác</Button>
-   </div>
       <HeaderContent>
         <Button type="primary" on={showModal}>Thêm</Button>
         <div>
