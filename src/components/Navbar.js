@@ -8,16 +8,13 @@ import {dashboardWithoutSidebarRoutes} from './routers/index';
 import { useLocation } from 'react-router-dom';
     
 const NavbarContainer = styled.div`
-    width: 100vw;
-    padding: 0 20px 0 260px;
+    padding: 0 20px 0 20px;
     background-color: #262f3d;
     border-bottom: 1px solid #E5E9F2;
     display:flex;
     justify-content: space-between;
     color:white;
-    z-index: 1;
     height:50px;
-    position:fixed;
 `
 const Left = styled.div`
 display: flex;
@@ -50,16 +47,18 @@ font-size:15px;
 margin:0;
 `
 
-const Navbar = () => {
-
-    const [display, setDisplay] = useState(false);
+const Navbar = (props) => {
 
     const location = useLocation();         // lấy đường dẫn hiện tại
+
+    const handleShowSidebar = () => {
+        props.functionShowSidebar();
+    }
 
     return (
        <NavbarContainer >
             <Left>
-                <Icon onClick={()=>{setDisplay(pre => !pre)}}>
+                <Icon onClick={() => handleShowSidebar()}>
                     <BarsOutlined style={{fontSize: "25px"}}/>
                 </Icon>
                 {

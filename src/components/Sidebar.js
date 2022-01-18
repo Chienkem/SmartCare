@@ -5,6 +5,7 @@ import './assets/style/Sidebar.css'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import { useState, useEffect } from 'react'
 import {dashboardWithoutSidebarRoutes} from './routers/index';
+import Navbar from './Navbar'
 
 const Flex = styled.div`
     display: flex;
@@ -13,7 +14,6 @@ const SidebarContainer = styled.div`
     background: #262f3d;
     width: 250px;
     height: 100vh;
-    z-index: 2;
 `
 const Avatar = styled.img`
     width: 50px;
@@ -75,12 +75,12 @@ const SidebarItem = ({name, to, icon}) => {
 }
 
 
-function Sidebar(){
-
-    const [titleNavbar, setTitleNavbar] = useState("ok");
+function Sidebar(props){
 
     return(
-        <SidebarContainer>
+        <SidebarContainer 
+            className={(props.isShow) ? "sidebar-open" : "sidebar-closed"}
+        >
             <User style={{padding: "20px"}}>
                 <Avatar src={avt} alt="Avatar" />
                 <div style={{margin:"0px 0 0 10px"}}>

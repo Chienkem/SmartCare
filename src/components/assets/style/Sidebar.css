@@ -1,4 +1,11 @@
 
+.sidebar-open{
+    display: block;
+}
+.sidebar-closed{
+    display: none;
+}
+
 .active{
     background-color: #1e2530;
     display: flex;

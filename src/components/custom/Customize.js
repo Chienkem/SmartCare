@@ -33,7 +33,6 @@ export const InputImage = ({title}) => {
 
 export const ContentContainer = styled.div`
     padding: 30px;
-    width: calc(100vw - 250px);
     height: calc(100vh - 50px);
     overflow-y: auto;
     ::-webkit-scrollbar {

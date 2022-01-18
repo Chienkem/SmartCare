@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Switch, Route, Routes } from "react-router-dom";
 import styled from 'styled-components'
+import { useState } from "react";
 
 import LogIn from '../LogIn';
 
@@ -15,10 +16,6 @@ import AirConditioner from "../AirConditioner";
 import ElectricWaterHeater from "../ElectricWaterHeater";
 import WaterFilter from "../WaterFilter";
 import Refrigerator from "../Refrigerator";
-
-const ContentContainer = styled.div`
- margin-top: 50px;
-`
 
 export const dashboardWithoutSidebarRoutes = [
     {
@@ -58,11 +55,6 @@ export const dashboardWithoutSidebarRoutes = [
         component: ElectricWaterHeater
     },
     {
-        path: "/services/other_services",
-        name: "Dịch vụ khác ...",
-        icon: true,
-    },
-    {
         path: "/customer",
         name: "Khách hàng",
         icon: false,
@@ -88,20 +80,29 @@ export const dashboardWithoutSidebarRoutes = [
     }
 ]
 
+
 export const Routers = () => {
+
+    const [showSidebar, setShowSidebar] = useState(true);
+    const callBackShowSidebar = () => setShowSidebar(!showSidebar);
+
     return (
         <Router>
             {localStorage.getItem('token') ? (
-                <div  style={{display:"flex"}}>
-                    <Sidebar />
-                    <Navbar />
-                    <ContentContainer>
+                <div style={{display:"flex"}}>
+                    <Sidebar
+                        isShow={showSidebar}
+                    />
+                    <div 
+                        style={showSidebar ? ({width: "calc(100% - 250px)"}) : ({width: "100%"})}
+                    >
+                        <Navbar functionShowSidebar={callBackShowSidebar}/>
                         <Routes>
                             {dashboardWithoutSidebarRoutes.map(({path, component: Component}, index) => (
                                 <Route path={path} key={index} element={< Component/>}/>
                             ))}
                         </Routes>
-                    </ContentContainer>
+                    </div>
                 </div>
             ):(
                 <LogIn />
