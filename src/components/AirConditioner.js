@@ -1,23 +1,27 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Table, Modal, Button, Row, Col, Select, Input } from 'antd';
-import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined} from '@ant-design/icons';
-import { TitleInput, ContentContainer, StatusTag, SearchInput, HeaderContent } from './custom/Customize';
-
+import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { TitleInput, ContentContainer, StatusTag, SearchInput, HeaderContent ,DeviceTypeTag} from './custom/Customize';
+import ModalService from './Modal/ModalSevices';
 const { Option } = Select;
 
-function AirConditioner(){
+function AirConditioner() {
 
+  //loading table mounted
+  const [loading, setLoading] = useState(false)
   // lấy dữ liệu từ server
-  const[dataAirConditioner, setDataAirConditioner] = useState([]);
+  const [dataSource, setDataSource] = useState([]);
   useEffect(() => {
-    axios.get('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/AirConditioner')
-    .then(res => {
-      setDataAirConditioner(res.data);
-    })
-    .catch(err => {
-      console.log(err);
-    })
+    setLoading(true)
+    axios.get('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/waterfilter')
+      .then(res => {
+        setLoading(false)
+        setDataSource(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }, [])
 
   // Cột
@@ -29,8 +33,8 @@ function AirConditioner(){
     },
     {
       title: 'Người dùng',
-      dataIndex: 'nameAirConditioner',
-      key: 'nameAirConditioner',
+      dataIndex: 'nameCustomer',
+      key: 'nameCustomer',
     },
     {
       title: 'Mã thiết bị',
@@ -41,6 +45,11 @@ function AirConditioner(){
       title: 'Loại dịch vụ',
       dataIndex: 'deviceType',
       key: 'deviceType',
+      render: (record) => {
+        return(
+          <DeviceTypeTag deviceType={record}/>
+        )
+      }
     },
     {
       title: 'Tỉnh/ Thành phố',
@@ -82,8 +91,8 @@ function AirConditioner(){
       key: 'status',
       dataIndex: 'status',
       render: (record) => {
-        return(
-          <StatusTag status={record}/>
+        return (
+          <StatusTag status={record} />
         )
       }
     },
@@ -91,50 +100,91 @@ function AirConditioner(){
       key: "action",
       title: "",
       render: (record) => {
-          return(
-            <div style={{display:'inline-flex'}}>
-              <EditOutlined
-                style={{ color: "#45A4FC" }}
-                onClick={() =>  {}}
-              />
-              <DeleteOutlined
-                onClick={() => handerDelete(record)}
-                style={{ marginLeft: 10, color: "red" }} />
-            </div>
-          )
+        return (
+          <div style={{ display: 'inline-flex' }}>
+            <EditOutlined
+              style={{ color: "#45A4FC" }}
+              onClick={() => {
+                setEditData({ ...record })
+                showModalEdit()
+              }}
+            />
+            <DeleteOutlined
+              onClick={() => handerDelete(record)}
+              style={{ marginLeft: 10, color: "red" }} />
+          </div>
+        )
       }
     }
   ];
-  
+
   //Lấy dữ liệu input từ form
-  const [serviceRequestData, setAirConditionerRequestData] = useState({});
-  const handerChangeAirConditionerRequestData = (e) => {
+  const [addData, setAddData] = useState({});
+  const [editData, setEditData] = useState({})
+  const handleValueModal = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    setAirConditionerRequestData({...serviceRequestData, [name]: value});
+    isEdit ? setEditData({ ...editData, [name]: value }) :
+      setAddData({ ...addData, [name]: value });
   }
 
   // Modal
+  const [isEdit, setIsEdit] = useState(false)
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const showModal = () => {
+  const showModalAdd = () => {
+    setIsEdit(false);
     setIsModalVisible(true);
+    setLoadingModal(false);
   };
+  const showModalEdit = () => {
+    setIsEdit(true);
+    setIsModalVisible(true);
+    setLoadingModal(false)
+  };
+  //reset Data 
+  const resetFormData = () => {
+    setIsModalVisible(false);
+    isEdit ? setIsEdit({}) : setAddData({});
+  }
 
   //ok modal (thêm dữ liệu)
   const handleOk = () => {
-    setIsModalVisible(false);
-    axios.post(`https://61e51bf0595afe00176e5310.mockapi.io/api/v1/AirConditioner`, serviceRequestData)
-    .then(res => {
-      setDataAirConditioner(pre => [...pre, res.data]);
-    })
-    .catch(err => {
-      console.log(err)
-    })
-  };
+    setLoadingModal(true)
+    if (isEdit) {
+      axios.put(`https://61e51bf0595afe00176e5310.mockapi.io/api/v1/waterfilter/` + editData.id, editData).then(res => {
+        resetFormData()
+        setDataSource((pre) => {
+          return pre.map((item) => {
+            if (item.id === editData.id) {
+              return res.data
+            }
+            else {
+              return item
+            }
+          })
+        })
+      }
+      )
+        .catch(err => {
+          console.log(err)
+        })
+    }
+    else {
+      setLoadingModal(true)
+      axios.post(`https://61e51bf0595afe00176e5310.mockapi.io/api/v1/waterfilter/`, addData)
+        .then(res => {
+          resetFormData();
+          setDataSource(pre => [...pre, res.data])
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  }
+
   //cancel modal
   const handleCancel = () => {
-    setIsModalVisible(false);
-    setAirConditionerRequestData({});
+    resetFormData();
   };
 
   // Xóa dữ liệu
@@ -142,64 +192,51 @@ function AirConditioner(){
     Modal.confirm({
       title: 'Bạn có chắc chắn muốn xóa?',
       icon: <ExclamationCircleOutlined />,
+      okType: "danger",
       onOk() {
-        axios.delete('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/AirConditioner/' + record.id)
-        .then(res => { 
-          setDataAirConditioner(pre => pre.filter(item => item.id !== record.id)); 
-        })
-      },
-      onCancel() {
-        // console.log('Cancel');
-      },
+        axios.delete('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/waterfilter/' + record.id)
+          .then(res => {
+            setDataSource(pre => pre.filter(item => item.id !== record.id));
+          })
+      }
     });
   }
-
-  const handlerSearch = (e) => {
-    axios.post('http://localhost:3001/service', serviceRequestData)
-    .then(res => {
-      setDataAirConditioner(res.data);
-    })
-  }
-
 
   //lấy tỉnh
   const [province, setProvince] = useState([])
   const handleClickProvince = () => {
     axios.get('https://provinces.open-api.vn/api/p/')
-    .then(res => {
-      setProvince(res.data);
-    })
+      .then(res => {
+        setProvince(res.data);
+      })
   }
   // lấy huyện
   const [district, setDistrict] = useState([])
   const handleChangeProvince = (e) => {
     axios.get(`https://provinces.open-api.vn/api/p/${e}?depth=2`)
-    .then(res => {
-      setDistrict(res.data.districts);
-    })
+      .then(res => {
+        setDistrict(res.data.districts);
+      })
   }
   //lấy xã
   const [ward, setWard] = useState([])
   const handleChangeDistrict = (e) => {
     axios.get(`https://provinces.open-api.vn/api/d/${e}?depth=2`)
-    .then(res => {
-      setWard(res.data.wards);
-    })
+      .then(res => {
+        setWard(res.data.wards);
+      })
   }
-
-  const [page,setPage] = useState(1)
-  const [pageSize,setPageSize] = useState(10)
-
-
-  return(
+  //loading modal
+  const [loadingModal, setLoadingModal] = useState(false)
+  return (
     <ContentContainer >
       <HeaderContent>
-        <Button type="primary" onClick={showModal}>Thêm</Button>
+        <Button type="primary" onClick={showModalAdd}>Thêm</Button>
         <div>
           <Select   //TRạng thái
             style={{ width: 120, marginRight: 30 }}
             placeholder="Trạng thái"
-            // onChange={e => handleChangeWard(e)}
+          // onChange={e => handleChangeWard(e)}
           >
             <Option value="0">Hoàn thành</Option>
             <Option value="1">Đang xử lý</Option>
@@ -231,7 +268,7 @@ function AirConditioner(){
           <Select   //xã
             style={{ width: 120 }}
             placeholder="Xã/ Phường"
-            // onChange={e => handleChangeWard(e)}
+          // onChange={e => handleChangeWard(e)}
           >
             {ward.map(item => (
               <Option value={item.code}>{item.name}</Option>
@@ -240,134 +277,26 @@ function AirConditioner(){
 
           <SearchInput
             placeholder='Tìm kiếm'
-            // onChange={e => handerChangeSearch(e)}
+          // onChange={e => handerChangeSearch(e)}
           />
         </div>
       </HeaderContent>
-      
+
       {/* bảng dữ liệu */}
       <Table
         columns={columns}
-        dataSource={dataAirConditioner}
-        rowKey={record => record.id} 
-        pagination={{
-          total: 100,
-          current: page,
-          pageSize: pageSize,
-          onChange: (page, pageSize) => {
-              setPage(page)
-              setPageSize(pageSize)
-            
-              // axios.get('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/AirConditioner/${page}')
-              // .then(res => {
-              //   setDataAirConditioner(res.data);
-              // })
-              // .catch(err => {
-              //   console.log(err);
-              // })
-              
-          }
-      }}
+        dataSource={dataSource}
+        rowKey={record => record.id}
+        loading={loading}
       />
-
-      {/* Modal */}
-      <Modal title="Yêu cầu dịch vụ" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        <Row justify="space-between" style={{paddingBottom: "20px"}}>
-          <Col span={11}>
-            <TitleInput>Họ và tên</TitleInput>
-            <Input
-              placeholder="Nguyễn Văn A"
-              name="nameAirConditioner"
-              onChange={e => handerChangeAirConditionerRequestData(e)}
-            />
-          </Col>
-          <Col span={11}>
-            <TitleInput>Số điện thoại</TitleInput>
-            <Input
-              name="phoneNumber"
-              placeholder="0312345678"
-              onChange={e => handerChangeAirConditionerRequestData(e)}
-            />
-          </Col>
-          <Col span={11}>
-            <TitleInput>Tỉnh</TitleInput>
-            <Input 
-              name="province"
-              placeholder="Hà Nội"
-              onChange={e => handerChangeAirConditionerRequestData(e)}
-            />
-          </Col>
-          <Col span={11}>
-            <TitleInput>Quận/Huyện</TitleInput>
-            <Input
-              name="district"
-              placeholder="Hà Đông"
-              onChange={e => handerChangeAirConditionerRequestData(e)}
-            />
-          </Col>
-          <Col span={11}>
-            <TitleInput>Xã/Phường</TitleInput>
-            <Input
-              name="ward"
-              placeholder="Mộ Lao"
-              onChange={e => handerChangeAirConditionerRequestData(e)}  
-            />
-          </Col>
-          <Col span={11}>
-            <TitleInput>Địa chỉ chi tiết</TitleInput>
-            <Input
-              name="address"
-              placeholder="Ngõ 6, Nguyễn Văn Trỗi,..."
-              onChange={e => handerChangeAirConditionerRequestData(e)}  
-            />
-          </Col>
-          <Col span={11}>
-            <TitleInput>Mã thiết bị</TitleInput>
-            <Input
-              name="deviceCode"
-              placeholder="Ngõ 6, Nguyễn Văn Trỗi,..."
-              onChange={e => handerChangeAirConditionerRequestData(e)}  
-            />
-          </Col>
-          <Col span={11}>
-            <TitleInput>Trạng thái</TitleInput>
-            <Select
-              placeholder="Trạng thái"
-              style={{ width:"100%" }}
-              name="status"
-              onChange={e => setAirConditionerRequestData({...serviceRequestData, status: e})}
-            >
-              <Option value="complete">Hoàn thành</Option>
-              <Option value="processing">Đang xử lý</Option>
-              <Option value="waiting">Chờ xử lý</Option>
-              <Option value="error">Lỗi</Option>
-            </Select>
-          </Col>
-          <Col span={11}>
-            <TitleInput>Ghi chú</TitleInput>
-            <Input
-              name="note"
-              placeholder="Ngõ 6, Nguyễn Văn Trỗi,..."
-              onChange={e => handerChangeAirConditionerRequestData(e)}
-            />
-          </Col>
-          <Col span={11}>
-            <TitleInput>Loại dịch vụ</TitleInput>
-            <Select
-              placeholder="Chọn dịch vụ"
-              style={{ width:"100%" }}
-              name="deviceType"
-              onChange={e => setAirConditionerRequestData({...serviceRequestData, deviceType: e})}
-            >
-              <Option value="Điều hòa">Điều hòa</Option>
-              <Option value="Máy lọc nước">Máy lọc nước</Option>
-              <Option value="Tủ lạnh">Tủ lạnh</Option>
-              <Option value="Bình nóng lạnh">Bình nóng lạnh</Option>
-              <Option value="Dịch vụ...">Dịch vụ...</Option>
-            </Select>
-          </Col>
-        </Row>
-      </Modal>
+      <ModalService isModalVisible={isModalVisible} onOk={handleOk}
+        onCancel={handleCancel} handleValueModal={handleValueModal}
+        setAddData={setAddData}
+        addData={addData} editData={editData}
+        isEdit={isEdit}
+        loading={loadingModal}
+        setEditData={setEditData}
+      />
     </ContentContainer>
   )
 }

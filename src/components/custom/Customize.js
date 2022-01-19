@@ -66,6 +66,29 @@ export const StatusTag = ({status}) => {
     )
 }
 
+export const DeviceTypeTag = ({deviceType}) => {
+    if(deviceType === "airconditioner")
+        return(
+            <Tag  style={{width:"120px", textAlign:"center"}}>Điều Hòa</Tag>
+        )
+    else if(deviceType === "electricwaterheader")
+        return(
+            <Tag  style={{width:"120px", textAlign:"center"}}>Máy Lọc Nước</Tag>
+        )
+    else if(deviceType === "refrigerator")
+        return(
+            <Tag style={{width:"120px", textAlign:"center"}}>Tủ Lạnh</Tag>
+        )
+    else if(deviceType === "waterfiler"){
+        return(
+            <Tag  style={{width:"120px", textAlign:"center"}}>Bình Nóng Lạnh</Tag>
+        )
+    }
+    else return(
+        <div>Lỗi</div>
+    )
+}
+
 export const SearchInput = styled.input`
     width: 250px;
     border: 0px;
