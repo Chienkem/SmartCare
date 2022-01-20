@@ -26,14 +26,6 @@ function ServiceReques(){
         }
       }
       getData();
-    //  axios.get('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/service_request')
-    //   .then(res => {
-    //     setLoading(false)
-    //     setDataSource(res.data);
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   })
    }, [])
 
   // Cột
@@ -189,7 +181,7 @@ function ServiceReques(){
       setLoadingModal(true)
       const postData = async () => {
         try {
-          const res = await ApiServiceRequest.post();
+          const res = await ApiServiceRequest.post(addData);
           resetFormData();
           setDataSource(pre => [...pre, res])
         } catch (err) {

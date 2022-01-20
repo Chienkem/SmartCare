@@ -1,21 +1,26 @@
 import axiosClient from "./axiosClient";
 
-const ApiServiceRequest = {
+const ApiService = {
     get: (pram) => {
-        const url = `/service_request`;
+        const url = `/service`;
         return axiosClient.get(url);
     },
 
     put: (id, data) => {
-        const url = `/service_request/${id}`;
+        const url = `/service/${id}`;
         return axiosClient.put(url, data);
     },
 
     post: (data) => {
-        const url = `/service_request`;
+        const url = `/service`;
         return axiosClient.post(url, data);
     },
 
+    delete: (id) => {
+        const url = `/service/${id}`;
+        return axiosClient.delete(url);
+    }
+
 }
 
-export default ApiServiceRequest;
+export default ApiService;
