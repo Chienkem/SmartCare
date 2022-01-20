@@ -62,7 +62,7 @@ export const StatusTag = ({status}) => {
         )
     }
     else return(
-        <div>Lỗi</div>
+        <div>Không xác định</div>
     )
 }
 
@@ -85,7 +85,7 @@ export const DeviceTypeTag = ({deviceType}) => {
         )
     }
     else return(
-        <div>Lỗi</div>
+        <div>Không xác định</div>
     )
 }
 

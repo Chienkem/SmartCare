@@ -3,8 +3,7 @@ import styled from "styled-components";
 import { Badge } from 'antd';
 import 'antd/dist/antd.css';
 import { BarsOutlined, LoginOutlined, BellOutlined } from '@ant-design/icons';
-import { useState, useEffect } from 'react';
-import {dashboardWithoutSidebarRoutes} from './routers/index';
+import {dashboardWithoutSidebarRoutes} from '../routers/index';
 import { useLocation } from 'react-router-dom';
     
 const NavbarContainer = styled.div`

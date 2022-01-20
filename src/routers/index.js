@@ -2,20 +2,20 @@ import { BrowserRouter as Router, Switch, Route, Routes } from "react-router-dom
 import styled from 'styled-components'
 import { useState } from "react";
 
-import LogIn from '../LogIn';
+import LogIn from '../components/LogIn';
 
-import Sidebar from "../Sidebar";
-import Navbar from "../Navbar";
-import ScanQR from "../ScanQR";
-import ServiceReques from "../ServiceRequest";
-import Employee from "../Employee";
-import Equipment from "../Equipment";
-import Service from "../Service";
-import Customer from './../Customer';
-import AirConditioner from "../AirConditioner";
-import ElectricWaterHeater from "../ElectricWaterHeater";
-import WaterFilter from "../WaterFilter";
-import Refrigerator from "../Refrigerator";
+import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
+import ScanQR from "../components/ScanQR";
+import ServiceReques from "../components/ServiceRequest";
+import Employee from "../components/Employee";
+import Equipment from "../components/Equipment";
+import Service from "../components/Service";
+import Customer from '../components/Customer';
+import AirConditioner from "../components/AirConditioner";
+import ElectricWaterHeater from "../components/ElectricWaterHeater";
+import WaterFilter from "../components/WaterFilter";
+import Refrigerator from "../components/Refrigerator";
 
 export const dashboardWithoutSidebarRoutes = [
     {

@@ -276,6 +276,8 @@ function ServiceReques(){
          rowKey={record => record.id}
          loading={loading}
        />
+
+        {/* modal */}
        <ModalServicesRequest isModalVisible={isModalVisible} onOk={handleOk}
          onCancel={handleCancel} handleValueModal={handleValueModal}
          setAddData={setAddData}

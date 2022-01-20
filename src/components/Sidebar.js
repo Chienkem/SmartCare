@@ -1,11 +1,9 @@
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
-import avt from './assets/img/avatar.jpg'
-import './assets/style/Sidebar.css'
+import avt from '../assets/img/avatar.jpg'
+import '../assets/style/Sidebar.css'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
-import { useState, useEffect } from 'react'
-import {dashboardWithoutSidebarRoutes} from './routers/index';
-import Navbar from './Navbar'
+import {dashboardWithoutSidebarRoutes} from '../routers/index';
 
 const Flex = styled.div`
     display: flex;
