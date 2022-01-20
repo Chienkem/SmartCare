@@ -4,24 +4,36 @@ import { Table, Modal, Button, Row, Col, Select, Input } from 'antd';
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined} from '@ant-design/icons';
 import { TitleInput, ContentContainer, StatusTag, SearchInput, HeaderContent ,DeviceTypeTag} from './custom/Customize';
 import ModalServicesRequest from "./Modal/ModalServicesRequest"
+import ApiServiceRequest from '../api/ApiServiceRequest';
 const { Option } = Select;
 
 function ServiceReques(){
 
    //loading table mounted
    const [loading, setLoading] = useState(false)
+   
    // lấy dữ liệu từ server
    const [dataSource, setDataSource] = useState([]);
    useEffect(() => {
-     setLoading(true)
-     axios.get('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/service_request')
-       .then(res => {
-         setLoading(false)
-         setDataSource(res.data);
-       })
-       .catch(err => {
-         console.log(err);
-       })
+      setLoading(true)
+      const getData = async () => {
+        try {
+          const res = await ApiServiceRequest.get();
+          setLoading(false)
+          setDataSource(res);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      getData();
+    //  axios.get('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/service_request')
+    //   .then(res => {
+    //     setLoading(false)
+    //     setDataSource(res.data);
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   })
    }, [])
 
   // Cột
@@ -149,38 +161,42 @@ function ServiceReques(){
      isEdit ? setIsEdit({}) : setAddData({});
    }
  
-   //ok modal (thêm dữ liệu)
+   //ok modal (thêm/sửa dữ liệu)
    const handleOk = () => {
     setLoadingModal(true)
     if (isEdit) {
-      axios.put(`https://61e51bf0595afe00176e5310.mockapi.io/api/v1/service_request/` + editData.id, editData).then(res => {
-        resetFormData()
-        setDataSource((pre) => {
-          return pre.map((item) => {
-            if (item.id === editData.id) {
-              return res.data
-            }
-            else {
-              return item
-            }
+      const putData = async () => {
+        try {
+          const res = await ApiServiceRequest.put(editData.id, editData);
+          resetFormData()
+          setDataSource((pre) => {
+            return pre.map((item) => {
+              if (item.id === editData.id) {
+                return res;
+              }
+              else {
+                return item;
+              }
+            })
           })
-        })
+        } catch (err) {
+          console.log(err);
+        }
       }
-      )
-        .catch(err => {
-          console.log(err)
-        })
+      putData();
     }
     else {
       setLoadingModal(true)
-      axios.post(`https://61e51bf0595afe00176e5310.mockapi.io/api/v1/service_request`, addData)
-        .then(res => {
+      const postData = async () => {
+        try {
+          const res = await ApiServiceRequest.post();
           resetFormData();
-          setDataSource(pre => [...pre, res.data])
-        })
-        .catch(err => {
-          console.log(err)
-        })
+          setDataSource(pre => [...pre, res])
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      postData();
     }
   }
 
