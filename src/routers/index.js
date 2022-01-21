@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Switch, Route, Routes } from "react-router-dom";
 import styled from 'styled-components'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import LogIn from '../components/LogIn';
 
@@ -19,7 +19,7 @@ import Refrigerator from "../components/Refrigerator";
 
 export const dashboardWithoutSidebarRoutes = [
     {
-        path: "/service_request",
+        path: "/",
         name: "Yêu cầu dịch vụ",
         icon: false,                //icon chấm than đầu sidebar
         component: ServiceReques,

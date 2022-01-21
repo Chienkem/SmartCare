@@ -21,25 +21,13 @@ function ServiceReques() {
         const res = await ApiServiceRequest.get();
         setLoading(false)
         setDataSource(res);
+        console.log(res);
       } catch (err) {
         console.log(err);
       }
-<<<<<<< HEAD
-      getData();
-   }, [])
-=======
     }
     getData();
-    //  axios.get('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/service_request')
-    //   .then(res => {
-    //     setLoading(false)
-    //     setDataSource(res.data);
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   })
-  }, [])
->>>>>>> 8feacfbc7d55c14f86a2192a80b332f6e3c6753b
+   }, [])
 
   // Cột
   const columns = [
@@ -300,7 +288,7 @@ function ServiceReques() {
         rowKey={record => record.id}
         loading={loading}
         pagination={{
-          total: 100, //số dữ liệu 
+          total: 100, //số dữ liệu backend trả về
           current: page,
           pageSize: pageSize,
           onChange: (page, pageSize) => {

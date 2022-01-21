@@ -4,24 +4,28 @@ import { Table, Button, Row, Col, Select, Input, Modal } from 'antd';
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { TitleInput, ContentContainer, StatusTag, SearchInput, HeaderContent } from './custom/Customize';
 import ModalCustomer from "./Modal/ModalCustomer.js"
+import ApiCustormer from '../api/ApiCustomer';
 
 const { Option } = Select;
 
 function Customer() {
+  
   //loading table mounted
   const [loading, setLoading] = useState(false)
   // lấy dữ liệu từ server
   const [dataSource, setDataSource] = useState([]);
   useEffect(() => {
     setLoading(true)
-    axios.get('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/customers')
-      .then(res => {
+    const getData = async () => {
+      try {
+        const res = await ApiCustormer.get();
         setLoading(false)
-        setDataSource(res.data);
-      })
-      .catch(err => {
+        setDataSource(res);
+      } catch (err) {
         console.log(err);
-      })
+      }
+    }
+    getData();
   }, [])
 
   // Cột
@@ -121,34 +125,38 @@ function Customer() {
   const handleOk = () => {
     setLoadingModal(true)
     if (isEdit) {
-      axios.put(`https://61e51bf0595afe00176e5310.mockapi.io/api/v1/customers/` + editData.id, editData).then(res => {
-        resetFormData()
-        setDataSource((pre) => {
-          return pre.map((item) => {
-            if (item.id === editData.id) {
-              return res.data
-            }
-            else {
-              return item
-            }
+      const putData = async () => {
+        try {
+          const res = await ApiCustormer.put(editData.id, editData);
+          resetFormData()
+          setDataSource((pre) => {
+            return pre.map((item) => {
+              if (item.id === editData.id) {
+                return res;
+              }
+              else {
+                return item;
+              }
+            })
           })
-        })
+        } catch (err) {
+          console.log(err);
+        }
       }
-      )
-        .catch(err => {
-          console.log(err)
-        })
+      putData();
     }
     else {
       setLoadingModal(true)
-      axios.post(`https://61e51bf0595afe00176e5310.mockapi.io/api/v1/customers/`, addData)
-        .then(res => {
+      const postData = async () => {
+        try {
+          const res = await ApiCustormer.post(addData);
           resetFormData();
-          setDataSource(pre => [...pre, res.data])
-        })
-        .catch(err => {
-          console.log(err)
-        })
+          setDataSource(pre => [...pre, res])
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      postData();
     }
   }
 
@@ -164,10 +172,17 @@ function Customer() {
       icon: <ExclamationCircleOutlined />,
       okType: "danger",
       onOk() {
-        axios.delete('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/customers/' + record.id)
-          .then(res => {
-            setDataSource(pre => pre.filter(item => item.id !== record.id));
-          })
+        const deleteData = async () => {
+          try {
+            const res = await ApiCustormer.delete(record.id);
+            setDataSource(pre => {
+              return pre.filter((item) => item.id !== record.id)
+            })
+          } catch (err) {
+            console.log(err);
+          }
+        }
+        deleteData();
       }
     });
   }

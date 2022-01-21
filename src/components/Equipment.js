@@ -4,6 +4,7 @@ import { Table, Modal, Button, Row, Col, Select, Input } from 'antd';
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined} from '@ant-design/icons';
 import { TitleInput, ContentContainer, StatusTag, SearchInput, HeaderContent } from './custom/Customize';
 import ModalEquipment from './Modal/ModalEquipment';
+import ApiEquipment from '../api/ApiEquipment';
 const { Option } = Select;
 
 function Equipment(){
@@ -13,14 +14,16 @@ const [loading, setLoading] = useState(false)
 const [dataSource, setDataSource] = useState([]);
 useEffect(() => {
   setLoading(true)
-  axios.get('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/equipment')
-    .then(res => {
+  const getData = async () => {
+    try {
+      const res = await ApiEquipment.get();
       setLoading(false)
-      setDataSource(res.data);
-    })
-    .catch(err => {
+      setDataSource(res);
+    } catch (err) {
       console.log(err);
-    })
+    }
+  }
+  getData();
 }, [])
 
   // Cột
@@ -106,34 +109,38 @@ useEffect(() => {
   const handleOk = () => {
     setLoadingModal(true)
     if (isEdit) {
-      axios.put(`https://61e51bf0595afe00176e5310.mockapi.io/api/v1/equipment/` + editData.id, editData).then(res => {
-        resetFormData()
-        setDataSource((pre) => {
-          return pre.map((item) => {
-            if (item.id === editData.id) {
-              return res.data
-            }
-            else {
-              return item
-            }
+      const putData = async () => {
+        try {
+          const res = await ApiEquipment.put(editData.id, editData);
+          resetFormData()
+          setDataSource((pre) => {
+            return pre.map((item) => {
+              if (item.id === editData.id) {
+                return res;
+              }
+              else {
+                return item;
+              }
+            })
           })
-        })
+        } catch (err) {
+          console.log(err);
+        }
       }
-      )
-        .catch(err => {
-          console.log(err)
-        })
+      putData();
     }
     else {
       setLoadingModal(true)
-      axios.post(`https://61e51bf0595afe00176e5310.mockapi.io/api/v1/equipment/`, addData)
-        .then(res => {
+      const postData = async () => {
+        try {
+          const res = await ApiEquipment.post(addData);
           resetFormData();
-          setDataSource(pre => [...pre, res.data])
-        })
-        .catch(err => {
-          console.log(err)
-        })
+          setDataSource(pre => [...pre, res])
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      postData();
     }
   }
 
@@ -149,10 +156,17 @@ useEffect(() => {
       icon: <ExclamationCircleOutlined />,
       okType: "danger",
       onOk() {
-        axios.delete('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/equipment/' + record.id)
-          .then(res => {
-            setDataSource(pre => pre.filter(item => item.id !== record.id));
-          })
+        const deleteData = async () => {
+          try {
+            const res = await ApiEquipment.delete(record.id);
+            setDataSource(pre => {
+              return pre.filter((item) => item.id !== record.id)
+            })
+          } catch (err) {
+            console.log(err);
+          }
+        }
+        deleteData();
       }
     });
   }

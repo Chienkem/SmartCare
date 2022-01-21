@@ -4,6 +4,8 @@ import { Table, Modal, Button, Row, Col, Select, Input } from 'antd';
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined} from '@ant-design/icons';
 import { TitleInput, ContentContainer, StatusTag, SearchInput, HeaderContent ,DeviceTypeTag} from './custom/Customize';
 import ModalService from './Modal/ModalSevices';
+import ApiService from '../api/ApiService';
+
 const { Option } = Select;
 
 function Service(){
@@ -14,14 +16,16 @@ function Service(){
    const [dataSource, setDataSource] = useState([]);
    useEffect(() => {
      setLoading(true)
-     axios.get('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/waterfilter')
-       .then(res => {
-         setLoading(false)
-         setDataSource(res.data);
-       })
-       .catch(err => {
-         console.log(err);
-       })
+     const getData = async () => {
+      try {
+        const res = await ApiService.get();
+        setLoading(false)
+        setDataSource(res);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    getData();
    }, [])
 
   // Cột
@@ -151,34 +155,38 @@ const resetFormData = () => {
 const handleOk = () => {
   setLoadingModal(true)
   if (isEdit) {
-    axios.put(`https://61e51bf0595afe00176e5310.mockapi.io/api/v1/waterfilter/` + editData.id, editData).then(res => {
-      resetFormData()
-      setDataSource((pre) => {
-        return pre.map((item) => {
-          if (item.id === editData.id) {
-            return res.data
-          }
-          else {
-            return item
-          }
+    const putData = async () => {
+      try {
+        const res = await ApiService.put(editData.id, editData);
+        resetFormData()
+        setDataSource((pre) => {
+          return pre.map((item) => {
+            if (item.id === editData.id) {
+              return res;
+            }
+            else {
+              return item;
+            }
+          })
         })
-      })
+      } catch (err) {
+        console.log(err);
+      }
     }
-    )
-      .catch(err => {
-        console.log(err)
-      })
+    putData();
   }
   else {
     setLoadingModal(true)
-    axios.post(`https://61e51bf0595afe00176e5310.mockapi.io/api/v1/waterfilter/`, addData)
-      .then(res => {
+    const postData = async () => {
+      try {
+        const res = await ApiService.post(addData);
         resetFormData();
-        setDataSource(pre => [...pre, res.data])
-      })
-      .catch(err => {
-        console.log(err)
-      })
+        setDataSource(pre => [...pre, res])
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    postData();
   }
 }
 
@@ -194,10 +202,17 @@ const handerDelete = (record) => {
     icon: <ExclamationCircleOutlined />,
     okType: "danger",
     onOk() {
-      axios.delete('https://61e51bf0595afe00176e5310.mockapi.io/api/v1/waterfilter/' + record.id)
-        .then(res => {
-          setDataSource(pre => pre.filter(item => item.id !== record.id));
-        })
+      const deleteData = async () => {
+        try {
+          const res = await ApiService.delete(record.id);
+          setDataSource(pre => {
+            return pre.filter((item) => item.id !== record.id)
+          })
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      deleteData();
     }
   });
 }
