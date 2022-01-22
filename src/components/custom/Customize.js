@@ -18,15 +18,16 @@ const InputFileContainer = styled.label`
     cursor: pointer;   
     text-align: center;
 ` 
-export const InputImage = ({title}) => {
+export const InputImage = ({title,onChange,avatar}) => {
     return(
         <div>
             <TitleInput>{title}</TitleInput>
-            <InputFileContainer htmlFor='input-image'>
+            <InputFileContainer htmlFor='input-image' style={{position:"relative","z-index":"1000"}}>
+                <img src ={avatar} alt="ảnh ọt" style={{width:"100%",height:"100%",position:"absolute","z-index":"-1"}}/>
                 <PlusOutlined style={{fontSize: "20px"}}/>
                 Chọn ảnh
             </InputFileContainer>
-            <input type="file" id="input-image" style={{display: "none"}}/>
+            <input type="file" id="input-image" name ="avatar" onChange={onChange} style={{display: "none"}}/>
         </div>
     )
 }

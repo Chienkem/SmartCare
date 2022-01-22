@@ -4,10 +4,10 @@ import { Table, Button, Row, Col, Select, Input, Modal } from 'antd';
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { TitleInput, ContentContainer, StatusTag, SearchInput, HeaderContent } from './custom/Customize';
 import ModalCustomer from "./Modal/ModalCustomer.js"
-import ApiCustormer from '../api/ApiCustomer';
+import ApiCustomer from '../api/ApiCustomer';
 
 const { Option } = Select;
-
+let formData = new FormData();
 function Customer() {
   
   //loading table mounted
@@ -18,7 +18,7 @@ function Customer() {
     setLoading(true)
     const getData = async () => {
       try {
-        const res = await ApiCustormer.get();
+        const res = await ApiCustomer.get();
         setLoading(false)
         setDataSource(res);
       } catch (err) {
@@ -37,18 +37,18 @@ function Customer() {
     },
     {
       title: 'Người dùng',
-      dataIndex: 'nameCustomer',
-      key: 'nameCustomer',
+      dataIndex: 'name',
+      key: 'name',
     },
     {
       title: 'Mã thiết bị',
-      dataIndex: 'deviceCode',
-      key: 'deviceCode',
+      dataIndex: 'deviceId',
+      key: 'deviceId',
     },
     {
       title: 'Tỉnh/ Thành phố',
-      dataIndex: 'province',
-      key: 'province',
+      dataIndex: 'city',
+      key: 'city',
     },
     {
       title: 'Quận/ Huyện',
@@ -57,18 +57,18 @@ function Customer() {
     },
     {
       title: 'Xã/ Phường',
-      dataIndex: 'ward',
+      dataIndex: 'wards',
       key: 'ward',
     },
     {
       title: 'Địa chỉ chi tiết',
-      dataIndex: 'address',
-      key: 'address',
+      dataIndex: 'detailAddress',
+      key: 'detailAddress',
     },
     {
       title: 'Số điện phone',
-      dataIndex: 'phoneNumber',
-      key: 'phoneNumber',
+      dataIndex: 'phone',
+      key: 'phone',
     },
     {
       key: "action",
@@ -90,18 +90,24 @@ function Customer() {
         )
       }
     }
-  ];
-
+  ]
   //Lấy dữ liệu input từ form
   const [addData, setAddData] = useState({});
   const [editData, setEditData] = useState({})
+  const [avatar,setAvartar] = useState("");
   const handleValueModal = (e) => {
+    const file= e.target?.files?e.target.files[0] : null
     const name = e.target.name;
     const value = e.target.value;
-    isEdit ? setEditData({ ...editData, [name]: value }) :
-      setAddData({ ...addData, [name]: value });
+    !!file && setAvartar(URL.createObjectURL(file))
+    // if(!!file){
+    //   formData.append("file",file)
+    //   formData.append("avatar",addData.name)
+    // }
+    isEdit ? setEditData({ ...editData, [name]: value}) :
+      setAddData({...addData, [name]: value,})//"file":file})
+      ;
   }
-
   // Modal
   const [isEdit, setIsEdit] = useState(false)
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -127,12 +133,12 @@ function Customer() {
     if (isEdit) {
       const putData = async () => {
         try {
-          const res = await ApiCustormer.put(editData.id, editData);
+          const res = await ApiCustomer.put(editData.id, editData);
           resetFormData()
           setDataSource((pre) => {
             return pre.map((item) => {
               if (item.id === editData.id) {
-                return res;
+                return editData;
               }
               else {
                 return item;
@@ -149,10 +155,20 @@ function Customer() {
       setLoadingModal(true)
       const postData = async () => {
         try {
-          const res = await ApiCustormer.post(addData);
+          // const res = await axios({
+          //   url: 'https://v2.convertapi.com/upload ',
+          //   method: 'POST',
+          //   data: formData,
+          //   headers: {
+          //     Accept: 'application/json',
+          //     'Content-Type': 'multipart/form-data',
+          //   },
+          // });
+         const res = await ApiCustomer.post("insert",addData)
           resetFormData();
           setDataSource(pre => [...pre, res])
-        } catch (err) {
+        } catch (err) { 
+           resetFormData();
           console.log(err);
         }
       }
@@ -174,7 +190,7 @@ function Customer() {
       onOk() {
         const deleteData = async () => {
           try {
-            const res = await ApiCustormer.delete(record.id);
+            const res = await ApiCustomer.delete(record.id);
             setDataSource(pre => {
               return pre.filter((item) => item.id !== record.id)
             })
@@ -197,19 +213,93 @@ function Customer() {
   }
   // lấy huyện
   const [district, setDistrict] = useState([])
+  const [citySearch,setCitySearch] = useState('') // lấy giá trị city đã chọn
   const handleChangeProvince = (e) => {
     axios.get(`https://provinces.open-api.vn/api/p/${e}?depth=2`)
       .then(res => {
         setDistrict(res.data.districts);
       })
+       const postData = async () => {
+        const cityName=province.filter((item)=>{
+          return item.code === e
+        })
+         try {
+          const res = await ApiCustomer.post("city",{
+           city:cityName[0].name
+          })
+           resetFormData();
+           setDataSource(res)
+           setCitySearch(cityName[0].name)
+         } catch (err) { 
+            resetFormData();
+           console.log(err);
+         }
+       }
+       postData();
   }
   //lấy xã
-  const [ward, setWard] = useState([])
+  const [wards, setWards] = useState([])
+  const [districtSearch,setDistrictSearch] = useState("")
   const handleChangeDistrict = (e) => {
-    axios.get(`https://provinces.open-api.vn/api/d/${e}?depth=2`)
-      .then(res => {
-        setWard(res.data.wards);
-      })
+    const districtName=district.filter((item)=>{
+      return item.code === e
+    })
+    const postData = async () => {
+      try {
+       const res = await ApiCustomer.post("district",{
+        city:citySearch,
+        district:districtName[0].name
+       })
+        setDistrictSearch(districtName[0].name)
+        resetFormData();
+        setDataSource(res)
+      } catch (err) { 
+         resetFormData();
+        console.log(err);
+      }
+    }
+    postData();
+     axios.get(`https://provinces.open-api.vn/api/d/${e}?depth=2`)
+       .then(res => {
+        setWards(res.data.wards);
+       })
+  }
+
+  const handleChangeWard = (e)=>{
+    const wardsName=wards.filter((item)=>{
+      return item.code === e
+    })
+    const postData = async () => {
+      try {
+       const res = await ApiCustomer.post("wards",{
+        city:citySearch,
+        district:districtSearch,
+        wards:wardsName[0].name
+       })
+        resetFormData();
+        setDataSource(res)
+      } catch (err) { 
+         resetFormData();
+        console.log(err);
+      }
+    }
+    postData();
+  }
+
+  //thanh serarch 
+  const [q,searchQ] = useState("")
+  const handleChangeSearch =(e)=>{
+    const postData = async () => {
+      try {
+       const res = await ApiCustomer.post("search",{
+        search: e.target.value
+       })
+       setDataSource(res)
+      } catch (err) { 
+        console.log(err);
+      }
+    }
+    postData();
   }
   //loading modal
   const [loadingModal, setLoadingModal] = useState(false)
@@ -253,16 +343,16 @@ function Customer() {
           <Select   //xã
             style={{ width: 120 }}
             placeholder="Xã/ Phường"
-          // onChange={e => handleChangeWard(e)}
+            onChange={e => handleChangeWard(e)}
           >
-            {ward.map(item => (
+            {wards.map(item => (
               <Option value={item.code}>{item.name}</Option>
             ))}
           </Select>
 
           <SearchInput
             placeholder='Tìm kiếm'
-          // onChange={e => handerChangeSearch(e)}
+          onChange={e => handleChangeSearch(e)}
           />
         </div>
       </HeaderContent>
@@ -281,6 +371,7 @@ function Customer() {
         isEdit={isEdit}
         loading={loadingModal}
         setEditData={setEditData} 
+        avatar={avatar}
       />
     </ContentContainer>
   )

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Table, Modal, Button, Row, Col, Select, Input } from 'antd';
-import { TitleInput, ContentContainer, StatusTag, SearchInput, HeaderContent } from "../custom/Customize"
+import { TitleInput, ContentContainer, StatusTag, SearchInput, HeaderContent ,InputImage} from "../custom/Customize"
 const { Option } = Select
-const ModalCustomer = ({ isModalVisible, onOk, onCancel, handleValueModal, setAddData, addData,isEdit,editData,loading,setEditData }) => {
+const ModalCustomer = ({ isModalVisible, onOk, onCancel, handleValueModal, setAddData, addData,isEdit,editData,loading,setEditData,avatar }) => {
 const title = isEdit?"Chỉnh sửa thông tin khách hàng" : "Thêm khách hàng"
     return <div>
         <Modal 
@@ -23,7 +23,7 @@ const title = isEdit?"Chỉnh sửa thông tin khách hàng" : "Thêm khách hà
                 <Col span={11}>
                     <TitleInput>Họ và tên</TitleInput>
                     <Input
-                          value={isEdit?editData?.nameCustomer:addData?.nameCustomer}
+                          value={isEdit?editData?.name:addData?.name}
                         placeholder="Nguyễn Văn A"
                         name="name"
                         onChange={e => handleValueModal(e)}
@@ -32,7 +32,7 @@ const title = isEdit?"Chỉnh sửa thông tin khách hàng" : "Thêm khách hà
                 <Col span={11}>
                     <TitleInput>Số điện thoại</TitleInput>
                     <Input
-                        value={isEdit?editData?.phoneNumber:addData?.phoneNumber}
+                        value={isEdit?editData?.phone:addData?.phone}
                         name="phone"
                         placeholder="0312345678"
                         onChange={e => handleValueModal(e)}
@@ -41,7 +41,7 @@ const title = isEdit?"Chỉnh sửa thông tin khách hàng" : "Thêm khách hà
                 <Col span={11}>
                     <TitleInput>Tỉnh</TitleInput>
                     <Input
-                        value={isEdit?editData?.province:addData?.province}
+                        value={isEdit?editData?.city:addData?.city}
                         name="city"
                         placeholder="Hà Nội"
                         onChange={e => handleValueModal(e)}
@@ -59,8 +59,8 @@ const title = isEdit?"Chỉnh sửa thông tin khách hàng" : "Thêm khách hà
                 <Col span={11}>
                     <TitleInput>Xã/Phường</TitleInput>
                     <Input
-                        value={isEdit?editData?.ward:addData?.ward}
-                        name="ward"
+                        value={isEdit?editData?.wards:addData?.wards}
+                        name="wards"
                         placeholder="Mộ Lao"
                         onChange={e => handleValueModal(e)}
                     />
@@ -68,7 +68,7 @@ const title = isEdit?"Chỉnh sửa thông tin khách hàng" : "Thêm khách hà
                 <Col span={11}>
                     <TitleInput>Địa chỉ chi tiết</TitleInput>
                     <Input
-                        value={isEdit?editData?.address:addData?.address}
+                        value={isEdit?editData?.detailAddress:addData?.detailAddress}
                         name="detailAddress"
                         placeholder="Ngõ 6, Nguyễn Văn Trỗi,..."
                         onChange={e => handleValueModal(e)}
@@ -77,32 +77,20 @@ const title = isEdit?"Chỉnh sửa thông tin khách hàng" : "Thêm khách hà
                 <Col span={11}>
                     <TitleInput>Mã thiết bị</TitleInput>
                     <Input
-                        value={isEdit?editData?.deviceCode:addData?.deviceCode}
+                        value={isEdit?editData?.deviceId:addData?.deviceId}
                         name="deviceId"
                         placeholder="abc123"
                         onChange={e => handleValueModal(e)}
                     />
                 </Col>
-
-
                 <Col span={11}>
-                    <TitleInput>test</TitleInput>
-                    <Input
-                        value={isEdit?editData?.deviceCode:addData?.deviceCode}
-                        name="avatar"
-                        placeholder="abc123"
-                        onChange={e => handleValueModal(e)}
+                    <InputImage 
+                    title="Ảnh đại diện" 
+                    onChange={handleValueModal}
+                    avatar={avatar}
                     />
-                </Col>
-                <Col span={11}>
-                    <TitleInput>test</TitleInput>
-                    <Input
-                        value={isEdit?editData?.deviceCode:addData?.deviceCode}
-                        name="status"
-                        placeholder="abc123"
-                        onChange={e => handleValueModal(e)}
-                    />
-                </Col>
+    
+                </Col>  
                 
             </Row>
         </Modal>
