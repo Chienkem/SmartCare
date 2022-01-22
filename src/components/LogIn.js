@@ -1,7 +1,47 @@
-import { Input, Button} from 'antd';
 import { useState } from 'react';
+import styled from 'styled-components';
 import Cookies from 'js-cookie';
 import ApiLogin from '../api/ApiLogin';
+
+const LogInContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+`
+const LogInForm = styled.div`
+    padding: 50px;
+    background-color: #fff;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+`
+const LoginInput = styled.input`
+    width: 300px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #d9d9d9;
+    margin-bottom: 20px;
+    &:focus {
+        outline: none;
+        box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
+    }
+`
+const LoginButton = styled.button`
+    width: 300px;
+    color: #fff;
+    font-size: 18px;
+    padding: 3px;
+    background-color: #262F3D;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    &:hover {
+        color: #d9d9d9;
+    }
+`
  
 function LogIn() {
 
@@ -26,34 +66,34 @@ function LogIn() {
                 }
             } catch (err) {
                 console.log(err);
+                alert(err);
             }
         }
         postData();
-
-        // window.location.href = "/service_request";
     }
 
     return (
-        <div className="LogIn">
-            <h3>Tài khoản</h3>
-            <Input
-                name="email"
-                placeholder="Nhập tên tài khoản"
-                onChange={e => handleChangeAccount(e)}
-            />
-            <h3>Mật khẩu</h3>
-            <Input
-                name="password"
-                placeholder="Nhập mật khẩu"
-                onChange={e => handleChangeAccount(e)}
-            />
-            <Button
-                type="primary"
-                style={{marginTop:"10px"}}
-                onClick={() => handleLogin()}
-            >Đăng nhập</Button>
-
-        </div>
+        <LogInContainer>
+            <LogInForm>
+                <h1>Smart Building</h1>
+                <LoginInput
+                    name="email"
+                    placeholder="Nhập tên tài khoản"
+                    onChange={e => handleChangeAccount(e)}
+                />
+                <br />
+                <LoginInput
+                    name="password"
+                    placeholder="Nhập mật khẩu"
+                    onChange={e => handleChangeAccount(e)}
+                />
+                <br/>
+                <LoginButton
+                    onClick={() => handleLogin()}
+                    >Đăng nhập
+                </LoginButton>
+            </LogInForm>
+        </LogInContainer>
     )
 }
 

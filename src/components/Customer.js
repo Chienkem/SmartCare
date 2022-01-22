@@ -20,7 +20,7 @@ function Customer() {
       try {
         const res = await ApiCustomer.get();
         setLoading(false)
-        setDataSource(res);
+        setDataSource(res.rows);
       } catch (err) {
         console.log(err);
       }
@@ -167,6 +167,7 @@ function Customer() {
          const res = await ApiCustomer.post("insert",addData)
           resetFormData();
           setDataSource(pre => [...pre, res])
+          console.log(res)
         } catch (err) { 
            resetFormData();
           console.log(err);
