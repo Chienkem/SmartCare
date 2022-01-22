@@ -20,7 +20,7 @@ function ServiceReques() {
       try {
         const res = await ApiServiceRequest.get();
         setLoading(false)
-        setDataSource(res);
+        setDataSource(res.rows);
         console.log(res);
       } catch (err) {
         console.log(err);

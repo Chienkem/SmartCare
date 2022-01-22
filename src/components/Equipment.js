@@ -171,30 +171,6 @@ useEffect(() => {
     });
   }
 
-  //lấy tỉnh
-  const [province, setProvince] = useState([])
-  const handleClickProvince = () => {
-    axios.get('https://provinces.open-api.vn/api/p/')
-      .then(res => {
-        setProvince(res.data);
-      })
-  }
-  // lấy huyện
-  const [district, setDistrict] = useState([])
-  const handleChangeProvince = (e) => {
-    axios.get(`https://provinces.open-api.vn/api/p/${e}?depth=2`)
-      .then(res => {
-        setDistrict(res.data.districts);
-      })
-  }
-  //lấy xã
-  const [ward, setWard] = useState([])
-  const handleChangeDistrict = (e) => {
-    axios.get(`https://provinces.open-api.vn/api/d/${e}?depth=2`)
-      .then(res => {
-        setWard(res.data.wards);
-      })
-  }
   //loading modal
   const [loadingModal, setLoadingModal] = useState(false)
   return (
@@ -202,48 +178,6 @@ useEffect(() => {
       <HeaderContent>
         <Button type="primary" onClick={showModalAdd}>Thêm</Button>
         <div>
-          <Select   //TRạng thái
-            style={{ width: 120, marginRight: 30 }}
-            placeholder="Trạng thái"
-          // onChange={e => handleChangeWard(e)}
-          >
-            <Option value="0">Hoàn thành</Option>
-            <Option value="1">Đang xử lý</Option>
-            <Option value="2">Chờ xử lý</Option>
-            <Option value="3">Lỗi</Option>
-          </Select>
-
-          <Select     //tỉnh
-            style={{ width: 120 }}
-            placeholder="Tỉnh/ Thành phố"
-            onClick={e => handleClickProvince(e)}
-            onChange={e => handleChangeProvince(e)}
-          >
-            {province.map(item => (
-              <Option value={item.code}>{item.name}</Option>
-            ))}
-          </Select>
-
-          <Select     //huyện
-            style={{ width: 120 }}
-            placeholder="Quận/ Huyện"
-            onChange={e => handleChangeDistrict(e)}
-          >
-            {district.map(item => (
-              <Option value={item.code}>{item.name}</Option>
-            ))}
-          </Select>
-
-          <Select   //xã
-            style={{ width: 120 }}
-            placeholder="Xã/ Phường"
-          // onChange={e => handleChangeWard(e)}
-          >
-            {ward.map(item => (
-              <Option value={item.code}>{item.name}</Option>
-            ))}
-          </Select>
-
           <SearchInput
             placeholder='Tìm kiếm'
           // onChange={e => handerChangeSearch(e)}

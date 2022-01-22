@@ -5,6 +5,7 @@ import 'antd/dist/antd.css';
 import { BarsOutlined, LoginOutlined, BellOutlined } from '@ant-design/icons';
 import {dashboardWithoutSidebarRoutes} from '../routers/index';
 import { useLocation } from 'react-router-dom';
+import Cookies from 'js-cookie';
     
 const NavbarContainer = styled.div`
     padding: 0 20px 0 20px;
@@ -76,7 +77,7 @@ const Navbar = (props) => {
                 </Icon>
                 <LogOutContainer
                     onClick={()=>{
-                        localStorage.removeItem("token");
+                        Cookies.remove('token');
                         window.location.href = "/login";
                     }}
                 >

@@ -3,7 +3,7 @@ import { Table, Modal, Button, Row, Col, Select, Input } from 'antd';
 import { TitleInput, ContentContainer, StatusTag, SearchInput, HeaderContent } from "../custom/Customize"
 const { Option } = Select
 const ModalServicesRequest = ({ isModalVisible, onOk, onCancel, handleValueModal, setAddData, addData, isEdit, editData, loading, setEditData }) => {
-    const title = isEdit ? "Chỉnh sửa thông tin khách hàng" : "Thêm khách hàng"
+    const title = isEdit ? "Chỉnh sửa thông tin dịch vụ" : "Thêm dịch vụ"
     return <div>
         <Modal
             title={title} visible={isModalVisible} onCancel={onCancel} onCancel={onCancel}
@@ -21,7 +21,7 @@ const ModalServicesRequest = ({ isModalVisible, onOk, onCancel, handleValueModal
         >
             <Row justify="space-between" style={{ paddingBottom: "20px" }}>
                 <Col span={11}>
-                    <TitleInput>Họ và tên</TitleInput>
+                    <TitleInput>Người dùng</TitleInput>
                     <Input
                         value={isEdit ? editData?.nameCustomer : addData?.nameCustomer}
                         placeholder="Nguyễn Văn A"

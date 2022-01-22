@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Switch, Route, Routes } from "react-router-dom";
 import styled from 'styled-components'
 import { useEffect, useState } from "react";
+import Cookies from 'js-cookie';
 
 import LogIn from '../components/LogIn';
 
@@ -88,7 +89,7 @@ export const Routers = () => {
 
     return (
         <Router>
-            {localStorage.getItem('token') ? (
+            {Cookies.get('token') ? (
                 <div style={{display:"flex"}}>
                     <Sidebar
                         isShow={showSidebar}

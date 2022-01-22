@@ -1,6 +1,7 @@
 import { Input, Button} from 'antd';
 import { useState } from 'react';
-import axios from 'axios';
+import Cookies from 'js-cookie';
+import ApiLogin from '../api/ApiLogin';
  
 function LogIn() {
 
@@ -12,16 +13,31 @@ function LogIn() {
     }
 
     const handleLogin = () => {
+        const postData = async () => {
+            try {
+                const res = await ApiLogin.post(account);
+                console.log(res);
+                if(res.message === 'success') {
+                    Cookies.set('token', res.token);
+                    window.location.href = '/';
+                }
+                else {
+                    alert(res);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        postData();
 
-            localStorage.setItem('token','ok');
-            window.location.href = "/service_request";
+        // window.location.href = "/service_request";
     }
 
     return (
         <div className="LogIn">
             <h3>Tài khoản</h3>
             <Input
-                name="username"
+                name="email"
                 placeholder="Nhập tên tài khoản"
                 onChange={e => handleChangeAccount(e)}
             />
