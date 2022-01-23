@@ -336,7 +336,6 @@ function Customer() {
     const [page, setPage] = useState(1)
     const [pageSize, setPageSize] = useState(10)
     const [total,setTotal] = useState(0)
-    console.log(total)
   return (
     <ContentContainer >
       <HeaderContent>
