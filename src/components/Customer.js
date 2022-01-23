@@ -1,14 +1,23 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { Table, Button, Row, Col, Select, Input, Modal } from 'antd';
+import { Table, Button, Row, Col, Select, Input, Modal, notification } from 'antd';
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { TitleInput, ContentContainer, StatusTag, SearchInput, HeaderContent } from './custom/Customize';
 import ModalCustomer from "./Modal/ModalCustomer.js"
 import ApiCustomer from '../api/ApiCustomer';
+import { checkNullValue } from '../action/checkNullValue';
 
 const { Option } = Select;
-let formData = new FormData();
+
 function Customer() {
+
+   //message 
+   const openNotificationWithIcon = (type, message, description) => {
+    notification[type]({
+      message: message,
+      description: description,
+    });
+  };
   
   //loading table mounted
   const [loading, setLoading] = useState(false)
@@ -92,8 +101,17 @@ function Customer() {
     }
   ]
   //Lấy dữ liệu input từ form
-  const [addData, setAddData] = useState({});
-  const [editData, setEditData] = useState({})
+  const firstDataAdd={
+    name: null,
+    phone: null,
+    city: null,
+    district: null,
+    wards: null,
+    detailAddress: null,
+    deviceId: null,
+  }
+  const [addData, setAddData] = useState(firstDataAdd);
+  const [editData, setEditData] = useState(firstDataAdd);
   const [avatar,setAvartar] = useState("");
   const handleValueModal = (e) => {
     const file= e.target?.files?e.target.files[0] : null
@@ -131,49 +149,61 @@ function Customer() {
   const handleOk = () => {
     setLoadingModal(true)
     if (isEdit) {
-      const putData = async () => {
-        try {
-          const res = await ApiCustomer.put(editData.id, editData);
-          resetFormData()
-          setDataSource((pre) => {
-            return pre.map((item) => {
-              if (item.id === editData.id) {
-                return editData;
-              }
-              else {
-                return item;
-              }
-            })
-          })
-        } catch (err) {
-          console.log(err);
-        }
+      if(checkNullValue(editData)){
+        openNotificationWithIcon('warning', 'Thông báo', 'Vui lòng nhập đầy đủ thông tin');
+        setLoadingModal(false)
       }
-      putData();
+      else{
+        const putData = async () => {
+          try {
+            const res = await ApiCustomer.put(editData.id, editData);
+            resetFormData()
+            setDataSource((pre) => {
+              return pre.map((item) => {
+                if (item.id === editData.id) {
+                  return editData;
+                }
+                else {
+                  return item;
+                }
+              })
+            })
+          } catch (err) {
+            console.log(err);
+          }
+        }
+        putData();
+      }
     }
     else {
       setLoadingModal(true)
-      const postData = async () => {
-        try {
-          // const res = await axios({
-          //   url: 'https://v2.convertapi.com/upload ',
-          //   method: 'POST',
-          //   data: formData,
-          //   headers: {
-          //     Accept: 'application/json',
-          //     'Content-Type': 'multipart/form-data',
-          //   },
-          // });
-         const res = await ApiCustomer.post("insert",addData)
-          resetFormData();
-          setDataSource(pre => [...pre, res])
-          console.log(res)
-        } catch (err) { 
-           resetFormData();
-          console.log(err);
-        }
+      if(checkNullValue(addData)){
+        openNotificationWithIcon('warning', 'Thông báo', 'Vui lòng nhập đầy đủ thông tin');
+        setLoadingModal(false)
       }
-      postData();
+      else{
+        const postData = async () => {
+          try {
+            // const res = await axios({
+            //   url: 'https://v2.convertapi.com/upload ',
+            //   method: 'POST',
+            //   data: formData,
+            //   headers: {
+            //     Accept: 'application/json',
+            //     'Content-Type': 'multipart/form-data',
+            //   },
+            // });
+          const res = await ApiCustomer.post("insert",addData)
+            resetFormData();
+            setDataSource(pre => [...pre, res])
+            console.log(res)
+          } catch (err) { 
+            resetFormData();
+            console.log(err);
+          }
+        }
+        postData();
+      }
     }
   }
 

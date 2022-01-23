@@ -1,18 +1,28 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { Table, Modal, Button, Row, Col, Select, Input } from 'antd';
+import { Table, Button, Select, notification, Space, message } from 'antd';
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { TitleInput, ContentContainer, StatusTag, SearchInput, HeaderContent, DeviceTypeTag } from './custom/Customize';
 import ModalServicesRequest from "./Modal/ModalServicesRequest"
 import ApiServiceRequest from '../api/ApiServiceRequest';
+import { checkNullValue } from '../action/checkNullValue';
 const { Option } = Select;
 
 function ServiceReques() {
+
+  //message 
+  const openNotificationWithIcon = (type, message, description) => {
+    notification[type]({
+      message: message,
+      description: description,
+    });
+  };
 
   //loading table mounted
   const [loading, setLoading] = useState(false)
 
   // lấy dữ liệu từ server
+  
   const [dataSource, setDataSource] = useState([]);
   useEffect(() => {
     setLoading(true)
@@ -126,8 +136,19 @@ function ServiceReques() {
   ];
 
   //Lấy dữ liệu input từ form
-  const [addData, setAddData] = useState({});
-  const [editData, setEditData] = useState({})
+  const firstDataAdd = {
+    nameCustomer: null,
+    phoneNumber: null,
+    province: null,
+    district: null,
+    ward: null,
+    address: null,
+    deviceCode: null,
+    status: null,
+    deviceType: null,
+  }
+  const [addData, setAddData] = useState(firstDataAdd);
+  const [editData, setEditData] = useState(firstDataAdd);
   const handleValueModal = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -158,38 +179,51 @@ function ServiceReques() {
   const handleOk = () => {
     setLoadingModal(true)
     if (isEdit) {
-      const putData = async () => {
-        try {
-          const res = await ApiServiceRequest.put(editData.id, editData);
-          resetFormData()
-          setDataSource((pre) => {
-            return pre.map((item) => {
-              if (item.id === editData.id) {
-                return res;
-              }
-              else {
-                return item;
-              }
-            })
-          })
-        } catch (err) {
-          console.log(err);
-        }
+      if(checkNullValue(editData)){
+        openNotificationWithIcon('warning', 'Thông báo', 'Vui lòng nhập đầy đủ thông tin');
+        setLoadingModal(false)
       }
-      putData();
+      else{
+        const putData = async () => {
+          try {
+            const res = await ApiServiceRequest.put(editData.id, editData);
+            resetFormData()
+            setDataSource((pre) => {
+              return pre.map((item) => {
+                if (item.id === editData.id) {
+                  return res;
+                }
+                else {
+                  return item;
+                }
+              })
+            })
+          } catch (err) {
+            console.log(err);
+          }
+        }
+        putData();
+      }
     }
     else {
       setLoadingModal(true)
-      const postData = async () => {
-        try {
-          const res = await ApiServiceRequest.post(addData);
-          resetFormData();
-          setDataSource(pre => [...pre, res])
-        } catch (err) {
-          console.log(err);
-        }
+      console.log(addData);
+      if(checkNullValue(addData)){
+        openNotificationWithIcon('warning', 'Thông báo', 'Vui lòng nhập đầy đủ thông tin');
+        setLoadingModal(false)
       }
-      postData();
+      else{
+        const postData = async () => {
+          try {
+            const res = await ApiServiceRequest.post(addData);
+            resetFormData();
+            setDataSource(pre => [...pre, res])
+          } catch (err) {
+            console.log(err);
+          }
+        }
+        postData();
+      }
     }
   }
 
@@ -224,9 +258,11 @@ function ServiceReques() {
   }
   //loading modal
   const [loadingModal, setLoadingModal] = useState(false)
+
   //get page dataSource
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
+
   return (
     <ContentContainer >
       <HeaderContent>

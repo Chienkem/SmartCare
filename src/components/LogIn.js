@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { notification } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import Cookies from 'js-cookie';
 import ApiLogin from '../api/ApiLogin';
 
@@ -20,7 +22,7 @@ const LogInForm = styled.div`
 `
 const LoginInput = styled.input`
     width: 300px;
-    padding: 10px;
+    padding: 10px 10px 10px 40px;
     border-radius: 5px;
     border: 1px solid #d9d9d9;
     margin-bottom: 20px;
@@ -42,9 +44,23 @@ const LoginButton = styled.button`
         color: #d9d9d9;
     }
 `
+const LoginIcon = styled.div`
+    position: absolute;
+    top: 10px;
+    left: 10px;
+`
  
 function LogIn() {
 
+    //message 
+  const openNotificationWithIcon = (type, message, description) => {
+    notification[type]({
+      message: message,
+      description: description,
+    });
+  };
+  
+    // get account from input
     const [account, setAccount] = useState({});
     const handleChangeAccount = (e) => {
         const name = e.target.name;
@@ -62,11 +78,11 @@ function LogIn() {
                     window.location.href = '/';
                 }
                 else {
-                    alert(res);
+                    openNotificationWithIcon('error', 'Đăng nhập thất bại', 'Tài khoản hoặc mật khẩu không chính xác');
                 }
             } catch (err) {
                 console.log(err);
-                alert(err);
+                openNotificationWithIcon('error', 'Đăng nhập thất bại', 'Lỗi hệ thống');
             }
         }
         postData();
@@ -75,19 +91,27 @@ function LogIn() {
     return (
         <LogInContainer>
             <LogInForm>
-                <h1>Smart Building</h1>
-                <LoginInput
-                    name="email"
-                    placeholder="Nhập tên tài khoản"
-                    onChange={e => handleChangeAccount(e)}
-                />
-                <br />
-                <LoginInput
-                    name="password"
-                    placeholder="Nhập mật khẩu"
-                    onChange={e => handleChangeAccount(e)}
-                />
-                <br/>
+                <h1>Home Care</h1>
+                <div style={{position: 'relative'}}>
+                    <LoginIcon>
+                        <UserOutlined style={{fontSize: '25px'}} />
+                    </LoginIcon>
+                    <LoginInput
+                        name="email"
+                        placeholder="Nhập địa chỉ email"
+                        onChange={e => handleChangeAccount(e)}
+                    />
+                </div>
+                <div style={{position: 'relative'}}>
+                    <LoginIcon>
+                        <LockOutlined style={{fontSize: '25px'}}/>
+                    </LoginIcon>
+                    <LoginInput
+                        name="password"
+                        placeholder="Nhập mật khẩu"
+                        onChange={e => handleChangeAccount(e)}
+                    />
+                </div>
                 <LoginButton
                     onClick={() => handleLogin()}
                     >Đăng nhập
