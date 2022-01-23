@@ -6,6 +6,7 @@ import { TitleInput, ContentContainer, StatusTag, SearchInput, HeaderContent } f
 import ModalCustomer from "./Modal/ModalCustomer.js"
 import ApiCustomer from '../api/ApiCustomer';
 import { checkNullValue } from '../action/checkNullValue';
+import SelectAddress from "../action/FilterAddress";
 
 const { Option } = Select;
 
@@ -21,6 +22,7 @@ function Customer() {
   //loading table mounted
   const [loading, setLoading] = useState(false)
   // lấy dữ liệu từ server
+
   const [dataSource, setDataSource] = useState([]);
   useEffect(() => {
     setLoading(true)
@@ -88,7 +90,7 @@ function Customer() {
             <EditOutlined
               style={{ color: "#45A4FC" }}
               onClick={() => {
-                setEditData({ ...record })
+                setEditData(record)
                 showModalEdit()
               }}
             />
@@ -100,8 +102,9 @@ function Customer() {
       }
     }
   ]
+
   //Lấy dữ liệu input từ form
-  const firstDataAdd={
+  const firstDataForm={
     name: null,
     phone: null,
     city: null,
@@ -110,8 +113,8 @@ function Customer() {
     detailAddress: null,
     deviceId: null,
   }
-  const [addData, setAddData] = useState(firstDataAdd);
-  const [editData, setEditData] = useState(firstDataAdd);
+  const [addData, setAddData] = useState(firstDataForm);
+  const [editData, setEditData] = useState(firstDataForm);
   const [avatar,setAvartar] = useState("");
   const handleValueModal = (e) => {
     const file= e.target?.files?e.target.files[0] : null
@@ -123,9 +126,9 @@ function Customer() {
     //   formData.append("avatar",addData.name)
     // }
     isEdit ? setEditData({ ...editData, [name]: value}) :
-      setAddData({...addData, [name]: value,})//"file":file})
-      ;
+      setAddData({...addData, [name]: value,});
   }
+
   // Modal
   const [isEdit, setIsEdit] = useState(false)
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -139,11 +142,13 @@ function Customer() {
     setIsModalVisible(true);
     setLoadingModal(false)
   };
+
   //reset Data 
   const resetFormData = () => {
     setIsModalVisible(false);
-    isEdit ? setIsEdit({}) : setAddData({});
+    isEdit ? setIsEdit(firstDataForm) : setAddData(firstDataForm);
   }
+
   //ok modal (thêm dữ liệu)
   const handleOk = () => {
     setLoadingModal(true)
@@ -183,19 +188,10 @@ function Customer() {
       else{
         const postData = async () => {
           try {
-            // const res = await axios({
-            //   url: 'https://v2.convertapi.com/upload ',
-            //   method: 'POST',
-            //   data: formData,
-            //   headers: {
-            //     Accept: 'application/json',
-            //     'Content-Type': 'multipart/form-data',
-            //   },
-            // });
           const res = await ApiCustomer.post("insert",addData)
             resetFormData();
             setDataSource(pre => [...pre, res])
-            setTotal(pre =>pre+1)
+            setTotal(pre => pre+1)
           } catch (err) { 
             resetFormData();
             openNotificationWithIcon('warning', 'Thông báo', "lỗi");
@@ -232,90 +228,7 @@ function Customer() {
     });
   }
 
-  //lấy tỉnh
-  const [province, setProvince] = useState([])
-  const handleClickProvince = () => {
-    axios.get('https://provinces.open-api.vn/api/p/')
-      .then(res => {
-        setProvince(res.data);
-      })
-  }
-  // lấy huyện
-  const [district, setDistrict] = useState([])
-  const [citySearch,setCitySearch] = useState('') // lấy giá trị city đã chọn
-  const handleChangeProvince = (e) => {
-    axios.get(`https://provinces.open-api.vn/api/p/${e}?depth=2`)
-      .then(res => {
-        setDistrict(res.data.districts);
-      })
-       const postData = async () => {
-        const cityName=province.filter((item)=>{
-          return item.code === e
-        })
-         try {
-          const res = await ApiCustomer.post("city",{
-           city:cityName[0].name
-          })
-
-           setDataSource(res.rows)
-           setTotal(res.count)
-           setCitySearch(cityName[0].name)
-         } catch (err) { 
-  
-           console.log(err);
-         }
-       }
-       postData();
-  }
-  //lấy xã
-  const [wards, setWards] = useState([])
-  const [districtSearch,setDistrictSearch] = useState("")
-  const handleChangeDistrict = (e) => {
-    const districtName=district.filter((item)=>{
-      return item.code === e
-    })
-    const postData = async () => {
-      try {
-       const res = await ApiCustomer.post("district",{
-        city:citySearch,
-        district:districtName[0].name
-       })
-        setDistrictSearch(districtName[0].name)
-        setDataSource(res.rows)
-        setTotal(res.count)
-      } catch (err) { 
-        console.log(err);
-      }
-    }
-    postData();
-     axios.get(`https://provinces.open-api.vn/api/d/${e}?depth=2`)
-       .then(res => {
-        setWards(res.data.wards);
-       })
-  }
-
-  const handleChangeWard = (e)=>{
-    const wardsName=wards.filter((item)=>{
-      return item.code === e
-    })
-    const postData = async () => {
-      try {
-       const res = await ApiCustomer.post("wards",{
-        city:citySearch,
-        district:districtSearch,
-        wards:wardsName[0].name
-       })
-        setDataSource(res.rows)
-        setTotal(res.count)
-      } catch (err) { 
-        console.log(err);
-      }
-    }
-    postData();
-  }
-
-  //thanh serarch 
-  const [q,searchQ] = useState("")
+  //thanh search 
   const handleChangeSearch =(e)=>{
     const postData = async () => {
       try {
@@ -330,63 +243,27 @@ function Customer() {
     }
     postData();
   }
+
   //loading modal
   const [loadingModal, setLoadingModal] = useState(false)
-    //get page dataSource
-    const [page, setPage] = useState(1)
-    const [pageSize, setPageSize] = useState(10)
-    const [total,setTotal] = useState(0)
+  //get page dataSource
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
+  const [total,setTotal] = useState(0)
+
   return (
     <ContentContainer >
       <HeaderContent>
         <Button type="primary" onClick={showModalAdd}>Thêm</Button>
-        <div>
-          {/* <Select   //TRạng thái
-            style={{ width: 120, marginRight: 30 }}
-            placeholder="Trạng thái"
-          // onChange={e => handleChangeWard(e)}
-          >
-            <Option value="0">Hoàn thành</Option>
-            <Option value="1">Đang xử lý</Option>
-            <Option value="2">Chờ xử lý</Option>
-            <Option value="3">Lỗi</Option>
-          </Select> */}
-
-          <Select     //tỉnh
-            style={{ width: 120 }}
-            placeholder="Tỉnh/ Thành phố"
-            onClick={e => handleClickProvince(e)}
-            onChange={e => handleChangeProvince(e)}
-          >
-            {province.map(item => (
-              <Option value={item.code}>{item.name}</Option>
-            ))}
-          </Select>
-
-          <Select     //huyện
-            style={{ width: 120 }}
-            placeholder="Quận/ Huyện"
-            onChange={e => handleChangeDistrict(e)}
-          >
-            {district.map(item => (
-              <Option value={item.code}>{item.name}</Option>
-            ))}
-          </Select>
-
-          <Select   //xã
-            style={{ width: 120 }}
-            placeholder="Xã/ Phường"
-            onChange={e => handleChangeWard(e)}
-          >
-            {wards.map(item => (
-              <Option value={item.code}>{item.name}</Option>
-            ))}
-          </Select>
-
-          <SearchInput
-            placeholder='Tìm kiếm'
-          onChange={e => handleChangeSearch(e)}
+        <div style={{display: 'flex'}}>
+          <SelectAddress  // filter by address
+            ApiComponent={ApiCustomer}
+            setDataSource={setDataSource}
           />
+          <SearchInput  //search
+            placeholder='Tìm kiếm'
+            onChange={e => handleChangeSearch(e)}
+          /> 
         </div>
       </HeaderContent>
 
@@ -417,8 +294,13 @@ function Customer() {
           }
         }}
       />
-      <ModalCustomer isModalVisible={isModalVisible} onOk={handleOk}
-        onCancel={handleCancel} handleValueModal={handleValueModal}
+
+      {/* modal thêm, sửa */}
+      <ModalCustomer
+        isModalVisible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        handleValueModal={handleValueModal}
         setAddData={setAddData}
         addData={addData} editData={editData}
         isEdit={isEdit}
@@ -426,6 +308,7 @@ function Customer() {
         setEditData={setEditData} 
         avatar={avatar}
       />
+
     </ContentContainer>
   )
 }

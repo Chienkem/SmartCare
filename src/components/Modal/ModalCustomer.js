@@ -1,29 +1,60 @@
 import React from 'react';
-import { Table, Modal, Button, Row, Col, Select, Input } from 'antd';
-import { TitleInput, ContentContainer, StatusTag, SearchInput, HeaderContent ,InputImage} from "../custom/Customize"
+import { Modal, Button, Row, Col, Select, Input } from 'antd';
+import { TitleInput ,InputImage} from "../custom/Customize"
+import GetAddress from '../../action/GetAddress';
+
 const { Option } = Select
-const ModalCustomer = ({ isModalVisible, onOk, onCancel, handleValueModal, setAddData, addData,isEdit,editData,loading,setEditData,avatar }) => {
-const title = isEdit?"Chỉnh sửa thông tin khách hàng" : "Thêm khách hàng"
-    return <div>
+
+function ModalCustomer({ isModalVisible, onOk, onCancel, handleValueModal, addData,isEdit,editData,loading, avatar, setAddData, setEditData, setAvatar }) {
+
+    const title = isEdit ? "Chỉnh sửa thông tin khách hàng" : "Thêm khách hàng"
+
+    // const listInputModal = [
+    //     {
+    //         key: "name",
+    //         title: "Tên khách hàng",
+    //         placeholder: "Nhập tên khách hàng",
+    //     },
+    //     {
+    //         key: "",
+    //         title: "",
+    //         placeholder: "",
+    //     },
+
+    // ]
+
+
+    return (
         <Modal 
-        title={title} visible={isModalVisible}  onCancel={onCancel} onCancel={onCancel}
-        footer={[
-            <Button
-              key="cancel"
-              onClick={onCancel}
-            >
-              Hủy
-            </Button>,
-            <Button key="ok" type="primary"  onClick={onOk} loading={loading} >
-                {isEdit ? "Chỉnh sửa": "Thêm"}
-            </Button>,
-          ]}
+            title={title}
+            visible={isModalVisible}  
+            footer={[
+                <Button
+                key="cancel"
+                onClick={onCancel}
+                >
+                    Hủy
+                </Button>,
+                <Button key="ok" type="primary"  onClick={onOk} loading={loading} >
+                    {isEdit ? "Chỉnh sửa": "Thêm"}
+                </Button>,
+            ]}
         >
             <Row justify="space-between" style={{ paddingBottom: "20px" }}>
+
+                {/* test demo */}
+                <Col span={24}>
+                    <GetAddress
+                        setDataAddress={isEdit ? setEditData : setAddData}
+                        valueAddress = {isEdit ? editData : addData}
+                    />
+                </Col>
+
+
                 <Col span={11}>
                     <TitleInput>Họ và tên</TitleInput>
                     <Input
-                          value={isEdit?editData?.name:addData?.name}
+                        value={isEdit ? editData.name : addData.name}
                         placeholder="Nguyễn Văn A"
                         name="name"
                         onChange={e => handleValueModal(e)}
@@ -32,13 +63,13 @@ const title = isEdit?"Chỉnh sửa thông tin khách hàng" : "Thêm khách hà
                 <Col span={11}>
                     <TitleInput>Số điện thoại</TitleInput>
                     <Input
-                        value={isEdit?editData?.phone:addData?.phone}
+                        value={isEdit ? editData.phone : addData.phone}
                         name="phone"
                         placeholder="0312345678"
                         onChange={e => handleValueModal(e)}
                     />
                 </Col>
-                <Col span={11}>
+                {/* <Col span={11}>
                     <TitleInput>Tỉnh</TitleInput>
                     <Input
                         value={isEdit?editData?.city:addData?.city}
@@ -64,7 +95,7 @@ const title = isEdit?"Chỉnh sửa thông tin khách hàng" : "Thêm khách hà
                         placeholder="Mộ Lao"
                         onChange={e => handleValueModal(e)}
                     />
-                </Col>
+                </Col> */}
                 <Col span={11}>
                     <TitleInput>Địa chỉ chi tiết</TitleInput>
                     <Input
@@ -90,11 +121,10 @@ const title = isEdit?"Chỉnh sửa thông tin khách hàng" : "Thêm khách hà
                     avatar={avatar}
                     />
     
-                </Col>  
-                
+                </Col>
             </Row>
         </Modal>
-    </div>;
+    )
 };
 
 export default ModalCustomer;
