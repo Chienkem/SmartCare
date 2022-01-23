@@ -75,6 +75,7 @@ function LogIn() {
                 console.log(res);
                 if(res.message === 'success') {
                     Cookies.set('token', res.token);
+                    localStorage.setItem("token",res.token);
                     window.location.href = '/';
                 }
                 else {

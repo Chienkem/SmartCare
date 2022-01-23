@@ -18,7 +18,6 @@ function Customer() {
       description: description,
     });
   };
-  
   //loading table mounted
   const [loading, setLoading] = useState(false)
   // lấy dữ liệu từ server
@@ -27,9 +26,10 @@ function Customer() {
     setLoading(true)
     const getData = async () => {
       try {
-        const res = await ApiCustomer.get();
+        const res = await ApiCustomer.get("1");
         setLoading(false)
         setDataSource(res.rows);
+        setTotal(res.count)
       } catch (err) {
         console.log(err);
       }
@@ -144,7 +144,6 @@ function Customer() {
     setIsModalVisible(false);
     isEdit ? setIsEdit({}) : setAddData({});
   }
-
   //ok modal (thêm dữ liệu)
   const handleOk = () => {
     setLoadingModal(true)
@@ -196,17 +195,16 @@ function Customer() {
           const res = await ApiCustomer.post("insert",addData)
             resetFormData();
             setDataSource(pre => [...pre, res])
-            console.log(res)
+            setTotal(pre =>pre+1)
           } catch (err) { 
             resetFormData();
-            console.log(err);
+            openNotificationWithIcon('warning', 'Thông báo', "lỗi");
           }
         }
         postData();
       }
     }
   }
-
   //cancel modal
   const handleCancel = () => {
     resetFormData();
@@ -258,11 +256,12 @@ function Customer() {
           const res = await ApiCustomer.post("city",{
            city:cityName[0].name
           })
-           resetFormData();
-           setDataSource(res)
+
+           setDataSource(res.rows)
+           setTotal(res.count)
            setCitySearch(cityName[0].name)
          } catch (err) { 
-            resetFormData();
+  
            console.log(err);
          }
        }
@@ -282,10 +281,9 @@ function Customer() {
         district:districtName[0].name
        })
         setDistrictSearch(districtName[0].name)
-        resetFormData();
-        setDataSource(res)
+        setDataSource(res.rows)
+        setTotal(res.count)
       } catch (err) { 
-         resetFormData();
         console.log(err);
       }
     }
@@ -307,10 +305,9 @@ function Customer() {
         district:districtSearch,
         wards:wardsName[0].name
        })
-        resetFormData();
-        setDataSource(res)
+        setDataSource(res.rows)
+        setTotal(res.count)
       } catch (err) { 
-         resetFormData();
         console.log(err);
       }
     }
@@ -325,7 +322,8 @@ function Customer() {
        const res = await ApiCustomer.post("search",{
         search: e.target.value
        })
-       setDataSource(res)
+       setDataSource(res.rows)
+       setTotal(res.count)
       } catch (err) { 
         console.log(err);
       }
@@ -334,12 +332,17 @@ function Customer() {
   }
   //loading modal
   const [loadingModal, setLoadingModal] = useState(false)
+    //get page dataSource
+    const [page, setPage] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+    const [total,setTotal] = useState(0)
+    console.log(total)
   return (
     <ContentContainer >
       <HeaderContent>
         <Button type="primary" onClick={showModalAdd}>Thêm</Button>
         <div>
-          <Select   //TRạng thái
+          {/* <Select   //TRạng thái
             style={{ width: 120, marginRight: 30 }}
             placeholder="Trạng thái"
           // onChange={e => handleChangeWard(e)}
@@ -348,7 +351,7 @@ function Customer() {
             <Option value="1">Đang xử lý</Option>
             <Option value="2">Chờ xử lý</Option>
             <Option value="3">Lỗi</Option>
-          </Select>
+          </Select> */}
 
           <Select     //tỉnh
             style={{ width: 120 }}
@@ -394,6 +397,26 @@ function Customer() {
         dataSource={dataSource}
         rowKey={record => record.id}
         loading={loading}
+        pagination={{
+          total: total, //số dữ liệu backend trả về
+          current: page,
+          pageSize: pageSize,
+          onChange: (page, pageSize) => {
+            setPage(page)
+            setPageSize(pageSize)
+            const getData = async () => {
+              setLoading(true)
+              try {
+                const res = await ApiCustomer.get(page);
+                setLoading(false)
+                setDataSource(res.rows);
+              } catch (err) {
+                console.log(err);
+              }
+            }
+            getData();
+          }
+        }}
       />
       <ModalCustomer isModalVisible={isModalVisible} onOk={handleOk}
         onCancel={handleCancel} handleValueModal={handleValueModal}

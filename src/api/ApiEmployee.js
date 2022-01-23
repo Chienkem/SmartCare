@@ -3,7 +3,11 @@ import axiosClient from "./axiosClient";
 const ApiEmployee = {
     get: (pram) => {
         const url = `/admin/staff/`;
-        return axiosClient.get(url);
+        return axiosClient.get(url,{
+            headers:{
+                "x-access-token":localStorage.getItem("token")
+            }
+        });
     },
 
     put: (id, data) => {

@@ -77,7 +77,7 @@ const Navbar = (props) => {
                 </Icon>
                 <LogOutContainer
                     onClick={()=>{
-                        Cookies.remove('token');
+                        localStorage.removeItem("token");
                         window.location.href = "/login";
                     }}
                 >
