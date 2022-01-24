@@ -23,8 +23,8 @@ const ModalEquipment = ({ isModalVisible, onOk, onCancel, handleValueModal, setA
                 <Col span={11}>
                     <TitleInput>Số điện thoại</TitleInput>
                     <Input
-                        value={isEdit ? editData?.phoneNumber : addData?.phoneNumber}
-                        name="phoneNumber"
+                        value={isEdit ? editData?.customerPhone : addData?.customerPhone}
+                        name="customerPhone"
                         placeholder="0312345678"
                         onChange={e => handleValueModal(e)}
                     />
@@ -32,25 +32,25 @@ const ModalEquipment = ({ isModalVisible, onOk, onCancel, handleValueModal, setA
                 <Col span={11}>
                     <TitleInput>Mã thiết bị</TitleInput>
                     <Input
-                        value={isEdit ? editData?.deviceCode : addData?.deviceCode}
-                        name="deviceCode"
-                        placeholder="Ngõ 6, Nguyễn Văn Trỗi,..."
+                        value={isEdit ? editData?.deviceId : addData?.deviceId}
+                        name="deviceId"
+                        placeholder="Mã thiết bị"
                         onChange={e => handleValueModal(e)}
                     />
                 </Col>
                 <Col span={11}>
                     <TitleInput>Trạng thái</TitleInput>
                     <Select
-                        value={isEdit ? editData?.status : addData?.status}
+                        value={isEdit ? editData?.statusDevice : addData?.statusDevice}
                         placeholder="Trạng thái"
                         style={{ width: "100%" }}
-                        name="status"
-                        onChange={e => isEdit ? setEditData({ ...editData, status: e }) : setAddData({ ...addData, status: e })}
+                        name="statusDevice"
+                        onChange={e => isEdit ? setEditData({ ...editData, statusDevice: e }) : setAddData({ ...addData, statusDevice: e })}
                     >
-                        <Option value="complete">Hoàn thành</Option>
-                        <Option value="processing">Đang xử lý</Option>
-                        <Option value="waiting">Chờ xử lý</Option>
-                        <Option value="error">Lỗi</Option>
+                        <Option value="3">Hoàn thành</Option>
+                        <Option value="2">Đang xử lý</Option>
+                        <Option value="1">Chờ xử lý</Option>
+                        <Option value="0">Lỗi</Option>
                     </Select>
                 </Col>
             </Row>

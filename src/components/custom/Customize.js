@@ -22,8 +22,8 @@ export const InputImage = ({title,onChange,avatar}) => {
     return(
         <div>
             <TitleInput>{title}</TitleInput>
-            <InputFileContainer htmlFor='input-image' style={{position:"relative","z-index":"1000"}}>
-                <img src ={avatar} alt="ảnh ọt" style={{width:"100%",height:"100%",position:"absolute","z-index":"-1"}}/>
+            <InputFileContainer htmlFor='input-image' style={{position:"relative","Zindex":"1000"}}>
+                <img src ={avatar}  style={{width:"100%",height:"100%",position:"absolute","Zindex":"-1"}}/>
                 <PlusOutlined style={{fontSize: "20px"}}/>
                 Chọn ảnh
             </InputFileContainer>
@@ -45,19 +45,19 @@ export const ContentContainer = styled.div`
 `
 
 export const StatusTag = ({status}) => {
-    if(status === "processing")
+    if(status === "2")
         return(
             <Tag color="#FFA500" style={{width:"80px", textAlign:"center"}}>Đang xử lý</Tag>
         )
-    else if(status === "complete")
+    else if(status === "3")
         return(
             <Tag color="#31A24C" style={{width:"80px", textAlign:"center"}}>Hoàn thành</Tag>
         )
-    else if(status === "error")
+    else if(status === "0")
         return(
             <Tag color="#FF0000" style={{width:"80px", textAlign:"center"}}>Lỗi</Tag>
         )
-    else if(status === "waiting"){
+    else if(status === "1"){
         return(
             <Tag color="#45A4FC" style={{width:"80px", textAlign:"center"}}>Chờ xử lý</Tag>
         )

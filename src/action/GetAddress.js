@@ -45,14 +45,14 @@ function GetAddress({ setDataAddress, valueAddress }) {
         const nameWard = listWard.filter(item => item.code === e);
         setDataAddress({...valueAddress, wards: nameWard[0].name});
     }
-
+console.log(valueAddress);
     return(
         <div>
             <Select
                 allowClear
                 style={{ width: 150 }}
                 placeholder="Tỉnh/ Thành phố"
-                value={valueAddress.province}
+                value={valueAddress.city}
                 onClick={e => getListProvince(e)}
                 onChange={e => chooseProvince(e)}
             >
@@ -63,6 +63,7 @@ function GetAddress({ setDataAddress, valueAddress }) {
 
             <Select
                 allowClear
+                value={valueAddress.district}
                 style={{ width: 150 }}
                 placeholder="Quận/ Huyện"
                 onChange={e => chooseDistrict(e)}
@@ -74,6 +75,7 @@ function GetAddress({ setDataAddress, valueAddress }) {
 
             <Select
                 allowClear
+                value={valueAddress.wards}
                 style={{ width: 150 }}
                 placeholder="Phường/ Xã"
                 onChange={e => chooseWard(e)}

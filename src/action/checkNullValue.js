@@ -1,11 +1,13 @@
 export const checkNullValue = (object) => {
     const value = Object.values(object);
+    console.log(object)
+    console.log(value)
     if(value.length === 0){
         return true
     }
-    else{
+    else if(true){
         for (let i = 0; i < value.length; i++) {
-            if (value[i] === null ) {
+            if (value[i] === null || value[i]==="") {
                 return true;
             }
         }

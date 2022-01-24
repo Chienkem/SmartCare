@@ -115,7 +115,7 @@ function Customer() {
   }
   const [addData, setAddData] = useState(firstDataForm);
   const [editData, setEditData] = useState(firstDataForm);
-  const [avatar,setAvartar] = useState("");
+  const [avatar,setAvartar] = useState("")
   const handleValueModal = (e) => {
     const file= e.target?.files?e.target.files[0] : null
     const name = e.target.name;

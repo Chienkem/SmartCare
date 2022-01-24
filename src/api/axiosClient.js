@@ -4,6 +4,10 @@ import axios from 'axios';
 
 const axiosClient = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
+     headers:{
+            "x-access-token":localStorage.getItem("token")
+        },
+        timeout: 3000
     // paramsSerializer: params => queryString.stringify(params),
 });
 
