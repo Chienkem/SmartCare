@@ -89,7 +89,7 @@ export const Routers = () => {
 
     return (
         <Router>
-            {Cookies.get('token') ? (
+            {localStorage.getItem('token') ? (
                 <div style={{display:"flex"}}>
                     <Sidebar
                         isShow={showSidebar}
