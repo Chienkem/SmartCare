@@ -6,6 +6,7 @@ import { TitleInput, ContentContainer, StatusTag, SearchInput, HeaderContent, De
 import ModalServicesRequest from "./Modal/ModalServicesRequest"
 import ApiServiceRequest from '../api/ApiServiceRequest';
 import { checkNullValue } from '../action/checkNullValue';
+import FilterAddress from "../action/FilterAddress";
 const { Option } = Select;
 
 function ServiceReques() {
@@ -137,15 +138,16 @@ function ServiceReques() {
 
   //Lấy dữ liệu input từ form
   const firstDataAdd = {
-    nameCustomer: null,
-    phoneNumber: null,
-    province: null,
+    name: null,
+    customerPhone: null,
+    city: null,
     district: null,
-    ward: null,
-    address: null,
+    wards: null,
+    detailAddress: null,
     deviceCode: null,
     status: null,
     deviceType: null,
+    note: null,
   }
   const [addData, setAddData] = useState(firstDataAdd);
   const [editData, setEditData] = useState(firstDataAdd);
@@ -232,30 +234,6 @@ function ServiceReques() {
     resetFormData();
   };
 
-  //lấy tỉnh
-  const [province, setProvince] = useState([])
-  const handleClickProvince = () => {
-    axios.get('https://provinces.open-api.vn/api/p/')
-      .then(res => {
-        setProvince(res.data);
-      })
-  }
-  // lấy huyện
-  const [district, setDistrict] = useState([])
-  const handleChangeProvince = (e) => {
-    axios.get(`https://provinces.open-api.vn/api/p/${e}?depth=2`)
-      .then(res => {
-        setDistrict(res.data.districts);
-      })
-  }
-  //lấy xã
-  const [ward, setWard] = useState([])
-  const handleChangeDistrict = (e) => {
-    axios.get(`https://provinces.open-api.vn/api/d/${e}?depth=2`)
-      .then(res => {
-        setWard(res.data.wards);
-      })
-  }
   //loading modal
   const [loadingModal, setLoadingModal] = useState(false)
 
@@ -267,7 +245,7 @@ function ServiceReques() {
     <ContentContainer >
       <HeaderContent>
         <Button type="primary" onClick={showModalAdd}>Thêm</Button>
-        <div>
+        <div style={{display: "flex"}}>
           <Select   //TRạng thái
             style={{ width: 120, marginRight: 30 }}
             placeholder="Trạng thái"
@@ -279,36 +257,10 @@ function ServiceReques() {
             <Option value="3">Lỗi</Option>
           </Select>
 
-          <Select     //tỉnh
-            style={{ width: 120 }}
-            placeholder="Tỉnh/ Thành phố"
-            onClick={e => handleClickProvince(e)}
-            onChange={e => handleChangeProvince(e)}
-          >
-            {province.map(item => (
-              <Option value={item.code}>{item.name}</Option>
-            ))}
-          </Select>
-
-          <Select     //huyện
-            style={{ width: 120 }}
-            placeholder="Quận/ Huyện"
-            onChange={e => handleChangeDistrict(e)}
-          >
-            {district.map(item => (
-              <Option value={item.code}>{item.name}</Option>
-            ))}
-          </Select>
-
-          <Select   //xã
-            style={{ width: 120 }}
-            placeholder="Xã/ Phường"
-          // onChange={e => handleChangeWard(e)}
-          >
-            {ward.map(item => (
-              <Option value={item.code}>{item.name}</Option>
-            ))}
-          </Select>
+          <FilterAddress 
+            ApiComponent={ApiServiceRequest}
+            setDataSource={setDataSource}
+          />
 
           <SearchInput
             placeholder='Tìm kiếm'

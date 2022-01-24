@@ -1,7 +1,10 @@
 import React from 'react';
 import { Table, Modal, Button, Row, Col, Select, Input } from 'antd';
 import { TitleInput, InputImage } from "../custom/Customize"
+import GetAddress from '../../action/GetAddress';
+
 const { Option } = Select
+
 const ModalEmployee = ({ isModalVisible, onOk, onCancel, handleValueModal, setAddData, addData, isEdit, editData, loading, setEditData }) => {
     const title = isEdit ? "Chỉnh sửa thông tin nhân viên" : "Thêm nhân viên"
     return <div>
@@ -23,55 +26,52 @@ const ModalEmployee = ({ isModalVisible, onOk, onCancel, handleValueModal, setAd
                 <Col span={11}>
                     <TitleInput>Họ và tên</TitleInput>
                     <Input
-                        value={isEdit ? editData?.phoneNumber : addData?.phoneNumber}
-                        name="nameEmployee"
+                        value={isEdit ? editData?.fullname : addData?.fullname}
+                        name="fullname"
                         placeholder="Nguyễn Văn A"
                         onChange={e => handleValueModal(e)}
                     />
                 </Col>
                 <Col span={11}>
-                    <TitleInput>Mã nhân viên</TitleInput>
+                    <TitleInput>Địa chỉ email</TitleInput>
                     <Input
-                        value={isEdit ? editData?.deviceCode : addData?.deviceCode}
-                        name="codeEmployee"
-                        placeholder="abc123"
+                        value={isEdit ? editData?.email : addData?.email}
+                        name="email"
+                        placeholder="abc123@gmail.com"
                         onChange={e => handleValueModal(e)}
                     />
                 </Col>
                 <Col span={11}>
                     <TitleInput>Số điện thoại</TitleInput>
                     <Input
-                        value={isEdit ? editData?.deviceCode : addData?.deviceCode}
-                        name="numberPhone"
+                        value={isEdit ? editData?.phoneNumber : addData?.phoneNumber}
+                        name="phoneNumber"
                         placeholder="0912345678"
                         onChange={e => handleValueModal(e)}
                     />
                 </Col>
                 <Col span={11}>
-                    <TitleInput>Tỉnh/ Thành phố</TitleInput>
+                    <TitleInput>Mật khẩu</TitleInput>
                     <Input
-                        value={isEdit ? editData?.deviceCode : addData?.deviceCode}
-                        name="province"
-                        placeholder="Hà Nội"
+                        value={isEdit ? editData?.password : addData?.password}
+                        name="password"
+                        placeholder="0912345678"
                         onChange={e => handleValueModal(e)}
                     />
                 </Col>
                 <Col span={11}>
-                    <TitleInput>Quận/ Huyện</TitleInput>
+                    <TitleInput>Mã nhân viên</TitleInput>
                     <Input
-                        value={isEdit ? editData?.deviceCode : addData?.deviceCode}
-                        name="district"
-                        placeholder="Hà Đông"
+                        value={isEdit ? editData?.staffId : addData?.staffId}
+                        name="staffId"
+                        placeholder="0912345678"
                         onChange={e => handleValueModal(e)}
                     />
                 </Col>
-                <Col span={11}>
-                    <TitleInput>Xã/ Phường</TitleInput>
-                    <Input
-                        value={isEdit ? editData?.deviceCode : addData?.deviceCode}
-                        name="ward"
-                        placeholder="Mộ Lao"
-                        onChange={e => handleValueModal(e)}
+                <Col span={24}>
+                    <GetAddress
+                        setDataAddress={isEdit ? setEditData : setAddData}
+                        valueAddress = {isEdit ? editData : addData}
                     />
                 </Col>
                 <Col span={11}>
@@ -80,13 +80,13 @@ const ModalEmployee = ({ isModalVisible, onOk, onCancel, handleValueModal, setAd
                         value={isEdit ? editData?.status : addData?.status}
                         placeholder="Dịch vụ"
                         style={{ width: "100%" }}
-                        name="deviceType"
-                        onChange={e => isEdit ? setEditData({ ...editData, deviceType: e }) : setAddData({ ...addData, deviceType: e })}
+                        name="role"
+                        onChange={e => isEdit ? setEditData({ ...editData, role: e }) : setAddData({ ...addData, role: e })}
                     >
-                        <Option value="airconditioner">Điều hòa</Option>
-                        <Option value="electricwaterheader">Máy lọc nước</Option>
-                        <Option value="refrigerator">Tủ lạnh</Option>
-                        <Option value="waterfiler">Bình nóng lạnh</Option>
+                        <Option value="1">Điều hòa</Option>
+                        <Option value="2">Máy lọc nước</Option>
+                        <Option value="3">Tủ lạnh</Option>
+                        <Option value="4">Bình nóng lạnh</Option>
                     </Select>
                 </Col>
                 <Col span={11}>

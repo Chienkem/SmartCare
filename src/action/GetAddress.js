@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
-import { Select } from "antd";
-import validateData from "json-server/lib/server/router/validate-data";
+import { Select, Col, Row, Input } from "antd";
+import { TitleInput } from "../components/custom/Customize";
 
 const { Option } = Select;
 
@@ -45,46 +45,61 @@ function GetAddress({ setDataAddress, valueAddress }) {
         const nameWard = listWard.filter(item => item.code === e);
         setDataAddress({...valueAddress, wards: nameWard[0].name});
     }
-console.log(valueAddress);
+
     return(
-        <div>
-            <Select
-                allowClear
-                style={{ width: 150 }}
-                placeholder="Tỉnh/ Thành phố"
-                value={valueAddress.city}
-                onClick={e => getListProvince(e)}
-                onChange={e => chooseProvince(e)}
-            >
-                {listProvince.map(item => (
-                    <Option value={item.code} >{item.name}</Option>
-                ))}
-            </Select>
-
-            <Select
-                allowClear
-                value={valueAddress.district}
-                style={{ width: 150 }}
-                placeholder="Quận/ Huyện"
-                onChange={e => chooseDistrict(e)}
-            >
-                {listDistrict.map(item => (
-                    <Option value={item.code} >{item.name}</Option>
-                ))}
-            </Select>
-
-            <Select
-                allowClear
-                value={valueAddress.wards}
-                style={{ width: 150 }}
-                placeholder="Phường/ Xã"
-                onChange={e => chooseWard(e)}
-            >
-                {listWard.map(item => (
-                    <Option value={item.code} >{item.name}</Option>
-                ))}
-            </Select>
-        </div>
+        <Row justify="space-between">
+            <Col span={11}>
+                <TitleInput>Tỉnh/ thành phố</TitleInput>
+                <Select
+                    allowClear
+                    style={{ width: '100%' }}
+                    placeholder="Tỉnh/ Thành phố"
+                    value={valueAddress.city}
+                    onClick={e => getListProvince(e)}
+                    onChange={e => chooseProvince(e)}
+                >
+                    {listProvince.map(item => (
+                        <Option value={item.code} >{item.name}</Option>
+                    ))}
+                </Select>
+            </Col>
+            <Col span={11}>
+                <TitleInput>Quận/ huyện</TitleInput>
+                <Select
+                    allowClear
+                    value={valueAddress.district}
+                    style={{ width: '100%' }}
+                    placeholder="Quận/ Huyện"
+                    onChange={e => chooseDistrict(e)}
+                >
+                    {listDistrict.map(item => (
+                        <Option value={item.code} >{item.name}</Option>
+                    ))}
+                </Select>
+            </Col>
+            <Col span={11}>
+                <TitleInput>Xã/ phường</TitleInput>
+                <Select
+                    allowClear
+                    value={valueAddress.wards}
+                    style={{ width: '100%' }}
+                    placeholder="Phường/ Xã"
+                    onChange={e => chooseWard(e)}
+                >
+                    {listWard.map(item => (
+                        <Option value={item.code} >{item.name}</Option>
+                    ))}
+                </Select>
+            </Col>
+            <Col span={11}>
+                <TitleInput>Địa chỉ chi tiết</TitleInput>
+                <Input
+                    value={valueAddress.detailAddress}
+                    placeholder="Ngõ 6, Nguyễn Văn Trỗi,..."
+                    onChange={e => setDataAddress({...valueAddress, detailAddress: e.target.value})}
+                />
+            </Col>
+        </Row>
     )
 }
 

@@ -68,19 +68,19 @@ export const StatusTag = ({status}) => {
 }
 
 export const DeviceTypeTag = ({deviceType}) => {
-    if(deviceType === "airconditioner")
+    if(deviceType === "1")
         return(
             <Tag  style={{width:"120px", textAlign:"center"}}>Điều Hòa</Tag>
         )
-    else if(deviceType === "electricwaterheader")
+    else if(deviceType === "2")
         return(
             <Tag  style={{width:"120px", textAlign:"center"}}>Máy Lọc Nước</Tag>
         )
-    else if(deviceType === "refrigerator")
+    else if(deviceType === "3")
         return(
             <Tag style={{width:"120px", textAlign:"center"}}>Tủ Lạnh</Tag>
         )
-    else if(deviceType === "waterfiler"){
+    else if(deviceType === "4"){
         return(
             <Tag  style={{width:"120px", textAlign:"center"}}>Bình Nóng Lạnh</Tag>
         )

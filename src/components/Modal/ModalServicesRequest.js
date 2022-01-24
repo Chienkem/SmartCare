@@ -1,7 +1,10 @@
 import React from 'react';
 import { Table, Modal, Button, Row, Col, Select, Input } from 'antd';
 import { TitleInput, ContentContainer, StatusTag, SearchInput, HeaderContent } from "../custom/Customize"
+import GetAddress from "../../action/GetAddress"
+
 const { Option } = Select
+
 const ModalServicesRequest = ({ isModalVisible, onOk, onCancel, handleValueModal, setAddData, addData, isEdit, editData, loading, setEditData }) => {
     const title = isEdit ? "Chỉnh sửa thông tin dịch vụ" : "Thêm dịch vụ"
     return <div>
@@ -23,55 +26,25 @@ const ModalServicesRequest = ({ isModalVisible, onOk, onCancel, handleValueModal
                 <Col span={11}>
                     <TitleInput>Người dùng</TitleInput>
                     <Input
-                        value={isEdit ? editData?.nameCustomer : addData?.nameCustomer}
+                        value={isEdit ? editData?.name : addData?.name}
                         placeholder="Nguyễn Văn A"
-                        name="nameCustomer"
+                        name="name"
                         onChange={e => handleValueModal(e)}
                     />
                 </Col>
                 <Col span={11}>
                     <TitleInput>Số điện thoại</TitleInput>
                     <Input
-                        value={isEdit ? editData?.phoneNumber : addData?.phoneNumber}
-                        name="phoneNumber"
+                        value={isEdit ? editData?.customerPhone : addData?.customerPhone}
+                        name="customerPhone"
                         placeholder="0312345678"
                         onChange={e => handleValueModal(e)}
                     />
                 </Col>
-                <Col span={11}>
-                    <TitleInput>Tỉnh</TitleInput>
-                    <Input
-                        value={isEdit ? editData?.province : addData?.province}
-                        name="province"
-                        placeholder="Hà Nội"
-                        onChange={e => handleValueModal(e)}
-                    />
-                </Col>
-                <Col span={11}>
-                    <TitleInput>Quận/Huyện</TitleInput>
-                    <Input
-                        value={isEdit ? editData?.district : addData?.district}
-                        name="district"
-                        placeholder="Hà Đông"
-                        onChange={e => handleValueModal(e)}
-                    />
-                </Col>
-                <Col span={11}>
-                    <TitleInput>Xã/Phường</TitleInput>
-                    <Input
-                        value={isEdit ? editData?.ward : addData?.ward}
-                        name="ward"
-                        placeholder="Mộ Lao"
-                        onChange={e => handleValueModal(e)}
-                    />
-                </Col>
-                <Col span={11}>
-                    <TitleInput>Địa chỉ chi tiết</TitleInput>
-                    <Input
-                        value={isEdit ? editData?.address : addData?.address}
-                        name="address"
-                        placeholder="Ngõ 6, Nguyễn Văn Trỗi,..."
-                        onChange={e => handleValueModal(e)}
+                <Col span={24}>
+                    <GetAddress
+                        setDataAddress={isEdit ? setEditData : setAddData}
+                        valueAddress = {isEdit ? editData : addData}
                     />
                 </Col>
                 <Col span={11}>
@@ -104,7 +77,7 @@ const ModalServicesRequest = ({ isModalVisible, onOk, onCancel, handleValueModal
                         value={isEdit ? editData?.deviceType : addData?.deviceType}
                         placeholder="Loại dịch vụ"
                         style={{ width: "100%" }}
-                        name="status"
+                        name="deviceType"
                         onChange={e => isEdit ? setEditData({ ...editData, deviceType: e }) : setAddData({ ...addData, deviceType: e })}
                     >
                         <Option value="airconditioner">Điều Hòa</Option>
@@ -112,6 +85,15 @@ const ModalServicesRequest = ({ isModalVisible, onOk, onCancel, handleValueModal
                         <Option value="refrigerator">Tủ Lạnh</Option>
                         <Option value="waterfiler">Bình Nóng Lạnh</Option>
                     </Select>
+                </Col>
+                <Col span={11}>
+                    <TitleInput>Ghi chú</TitleInput>
+                    <Input.TextArea
+                        value={isEdit ? editData?.note : addData?.note}
+                        name="note"
+                        placeholder="Ghi chú..."
+                        onChange={e => handleValueModal(e)}
+                    />
                 </Col>
             </Row>
         </Modal>

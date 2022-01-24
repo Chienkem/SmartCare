@@ -7,22 +7,7 @@ const { Option } = Select
 
 function ModalCustomer({ isModalVisible, onOk, onCancel, handleValueModal, addData,isEdit,editData,loading, avatar, setAddData, setEditData, setAvatar }) {
 
-    const title = isEdit ? "Chỉnh sửa thông tin khách hàng" : "Thêm khách hàng"
-
-    // const listInputModal = [
-    //     {
-    //         key: "name",
-    //         title: "Tên khách hàng",
-    //         placeholder: "Nhập tên khách hàng",
-    //     },
-    //     {
-    //         key: "",
-    //         title: "",
-    //         placeholder: "",
-    //     },
-
-    // ]
-
+    const title = isEdit ? "Chỉnh sửa thông tin khách hàng" : "Thêm khách hàng";
 
     return (
         <Modal 
@@ -41,16 +26,6 @@ function ModalCustomer({ isModalVisible, onOk, onCancel, handleValueModal, addDa
             ]}
         >
             <Row justify="space-between" style={{ paddingBottom: "20px" }}>
-
-                {/* test demo */}
-                <Col span={24}>
-                    <GetAddress
-                        setDataAddress={isEdit ? setEditData : setAddData}
-                        valueAddress = {isEdit ? editData : addData}
-                    />
-                </Col>
-
-
                 <Col span={11}>
                     <TitleInput>Họ và tên</TitleInput>
                     <Input
@@ -69,40 +44,10 @@ function ModalCustomer({ isModalVisible, onOk, onCancel, handleValueModal, addDa
                         onChange={e => handleValueModal(e)}
                     />
                 </Col>
-                {/* <Col span={11}>
-                    <TitleInput>Tỉnh</TitleInput>
-                    <Input
-                        value={isEdit?editData?.city:addData?.city}
-                        name="city"
-                        placeholder="Hà Nội"
-                        onChange={e => handleValueModal(e)}
-                    />
-                </Col>
-                <Col span={11}>
-                    <TitleInput>Quận/Huyện</TitleInput>
-                    <Input
-                        value={isEdit?editData?.district:addData?.district}
-                        name="district"
-                        placeholder="Hà Đông"
-                        onChange={e => handleValueModal(e)}
-                    />
-                </Col>
-                <Col span={11}>
-                    <TitleInput>Xã/Phường</TitleInput>
-                    <Input
-                        value={isEdit?editData?.wards:addData?.wards}
-                        name="wards"
-                        placeholder="Mộ Lao"
-                        onChange={e => handleValueModal(e)}
-                    />
-                </Col> */}
-                <Col span={11}>
-                    <TitleInput>Địa chỉ chi tiết</TitleInput>
-                    <Input
-                        value={isEdit?editData?.detailAddress:addData?.detailAddress}
-                        name="detailAddress"
-                        placeholder="Ngõ 6, Nguyễn Văn Trỗi,..."
-                        onChange={e => handleValueModal(e)}
+                <Col span={24}>
+                    <GetAddress
+                        setDataAddress={isEdit ? setEditData : setAddData}
+                        valueAddress = {isEdit ? editData : addData}
                     />
                 </Col>
                 <Col span={11}>
@@ -116,9 +61,9 @@ function ModalCustomer({ isModalVisible, onOk, onCancel, handleValueModal, addDa
                 </Col>
                 <Col span={11}>
                     <InputImage 
-                    title="Ảnh đại diện" 
-                    onChange={handleValueModal}
-                    avatar={avatar}
+                        title="Ảnh đại diện" 
+                        onChange={handleValueModal}
+                        avatar={avatar}
                     />
     
                 </Col>

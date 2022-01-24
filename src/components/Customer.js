@@ -6,7 +6,7 @@ import { TitleInput, ContentContainer, StatusTag, SearchInput, HeaderContent } f
 import ModalCustomer from "./Modal/ModalCustomer.js"
 import ApiCustomer from '../api/ApiCustomer';
 import { checkNullValue } from '../action/checkNullValue';
-import SelectAddress from "../action/FilterAddress";
+import FilterAddress from "../action/FilterAddress";
 
 const { Option } = Select;
 
@@ -121,12 +121,14 @@ function Customer() {
     const name = e.target.name;
     const value = e.target.value;
     !!file && setAvartar(URL.createObjectURL(file))
+
     // if(!!file){
-    //   formData.append("file",file)
-    //   formData.append("avatar",addData.name)
+    //   addData.append("file",file)
+    //   addData.append("avatar",addData.name)
     // }
+    
     isEdit ? setEditData({ ...editData, [name]: value}) :
-      setAddData({...addData, [name]: value,});
+      setAddData({...addData, [name]: value});
   }
 
   // Modal
@@ -256,7 +258,7 @@ function Customer() {
       <HeaderContent>
         <Button type="primary" onClick={showModalAdd}>Thêm</Button>
         <div style={{display: 'flex'}}>
-          <SelectAddress  // filter by address
+          <FilterAddress  // filter by address
             ApiComponent={ApiCustomer}
             setDataSource={setDataSource}
           />

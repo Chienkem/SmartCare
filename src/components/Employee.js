@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Table, Modal, Button, Row, Col, Select, Input } from 'antd';
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined} from '@ant-design/icons';
-import { TitleInput, ContentContainer, SearchInput, HeaderContent, DeviceTypeTag } from './custom/Customize';
+import { ContentContainer, SearchInput, HeaderContent, DeviceTypeTag } from './custom/Customize';
 import ModalEmployee from './Modal/ModalEmployee';
 import ApiEmployee from '../api/ApiEmployee';
 const { Option } = Select;
@@ -18,7 +18,7 @@ useEffect(() => {
     try {
       const res = await ApiEmployee.get();
       setLoading(false)
-      setDataSource(res);
+      setDataSource(res.rows);
     } catch (err) {
       console.log(err);
     }
