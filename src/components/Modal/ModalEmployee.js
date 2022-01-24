@@ -5,7 +5,7 @@ import GetAddress from '../../action/GetAddress';
 
 const { Option } = Select
 
-const ModalEmployee = ({ isModalVisible, onOk, onCancel, handleValueModal, setAddData, addData, isEdit, editData, loading, setEditData }) => {
+const ModalEmployee = ({ isModalVisible, onOk, onCancel, handleValueModal, setAddData, addData, isEdit, editData, loading, setEditData, avatar }) => {
     const title = isEdit ? "Chỉnh sửa thông tin nhân viên" : "Thêm nhân viên"
     return <div>
         <Modal
@@ -26,8 +26,8 @@ const ModalEmployee = ({ isModalVisible, onOk, onCancel, handleValueModal, setAd
                 <Col span={11}>
                     <TitleInput>Họ và tên</TitleInput>
                     <Input
-                        value={isEdit ? editData?.fullname : addData?.fullname}
-                        name="fullname"
+                        value={isEdit ? editData?.fullName : addData?.fullName}
+                        name="fullName"
                         placeholder="Nguyễn Văn A"
                         onChange={e => handleValueModal(e)}
                     />
@@ -77,7 +77,7 @@ const ModalEmployee = ({ isModalVisible, onOk, onCancel, handleValueModal, setAd
                 <Col span={11}>
                     <TitleInput>Loại dịch vụ</TitleInput>
                     <Select
-                        value={isEdit ? editData?.status : addData?.status}
+                        value={isEdit ? editData?.role : addData?.role}
                         placeholder="Dịch vụ"
                         style={{ width: "100%" }}
                         name="role"
@@ -90,7 +90,11 @@ const ModalEmployee = ({ isModalVisible, onOk, onCancel, handleValueModal, setAd
                     </Select>
                 </Col>
                 <Col span={11}>
-                    <InputImage title="Ảnh đại diện" />
+                    <InputImage
+                        title="Ảnh đại diện"  
+                        onChange={handleValueModal}
+                        avatar={avatar}  
+                    />
                 </Col>
             </Row>
         </Modal>

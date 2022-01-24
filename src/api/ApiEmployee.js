@@ -1,30 +1,25 @@
 import axiosClient from "./axiosClient";
 
 const ApiEmployee = {
-    get: (pram) => {
-        const url = `/admin/staff/`;
-        return axiosClient.get(url,{
-            headers:{
-                "x-access-token":localStorage.getItem("token")
-            }
-        });
+    get: (page="") => {
+        const url = `/admin/staff/?page=${page}`;
+        return axiosClient.get(url);
     },
 
     put: (id, data) => {
-        const url = `/admin/staff/edit/:${id}`;
+        const url = `/admin/staff/edit/${id}`;
         return axiosClient.put(url, data);
     },
 
-    post: (data) => {
-        const url = `/admin/staff/insert`;
+    post: (param="",data) => {
+        const url = `/admin/staff/${param}`;
         return axiosClient.post(url, data);
     },
 
     delete: (id) => {
-        const url = `/admin/staff/delete/:${id}`;
+        const url = `/admin/staff/delete/${id}`;
         return axiosClient.delete(url);
     }
-
 }
 
 export default ApiEmployee;

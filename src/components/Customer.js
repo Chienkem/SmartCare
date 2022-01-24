@@ -121,12 +121,10 @@ function Customer() {
     const name = e.target.name;
     const value = e.target.value;
     !!file && setAvartar(URL.createObjectURL(file))
-
     // if(!!file){
     //   addData.append("file",file)
     //   addData.append("avatar",addData.name)
     // }
-    
     isEdit ? setEditData({ ...editData, [name]: value}) :
       setAddData({...addData, [name]: value});
   }
