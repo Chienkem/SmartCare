@@ -61,8 +61,8 @@ useEffect(() => {
     },
     {
         title: 'Trạng thái',
-        key: 'statusDevice',
-        dataIndex: 'statusDevice',
+        key: 'status',
+        dataIndex: 'status',
         render: (record) => {
           return(
             <StatusTag status={record}/>

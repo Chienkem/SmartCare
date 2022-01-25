@@ -23,15 +23,7 @@ const ModalServicesRequest = ({ isModalVisible, onOk, onCancel, handleValueModal
             ]}
         >
             <Row justify="space-between" style={{ paddingBottom: "20px" }}>
-                <Col span={11}>
-                    <TitleInput>Người dùng</TitleInput>
-                    <Input
-                        value={isEdit ? editData?.name : addData?.name}
-                        placeholder="Nguyễn Văn A"
-                        name="name"
-                        onChange={e => handleValueModal(e)}
-                    />
-                </Col>
+               
                 <Col span={11}>
                     <TitleInput>Số điện thoại</TitleInput>
                     <Input
@@ -41,18 +33,12 @@ const ModalServicesRequest = ({ isModalVisible, onOk, onCancel, handleValueModal
                         onChange={e => handleValueModal(e)}
                     />
                 </Col>
-                <Col span={24}>
-                    <GetAddress
-                        setDataAddress={isEdit ? setEditData : setAddData}
-                        valueAddress = {isEdit ? editData : addData}
-                    />
-                </Col>
                 <Col span={11}>
                     <TitleInput>Mã thiết bị</TitleInput>
                     <Input
-                        value={isEdit ? editData?.deviceCode : addData?.deviceCode}
-                        name="deviceCode"
-                        placeholder="Ngõ 6, Nguyễn Văn Trỗi,..."
+                        value={isEdit ? editData?.deviceId : addData?.deviceId}
+                        name="deviceId"
+                        placeholder="Mã thiết bị"
                         onChange={e => handleValueModal(e)}
                     />
                 </Col>
@@ -65,25 +51,34 @@ const ModalServicesRequest = ({ isModalVisible, onOk, onCancel, handleValueModal
                         name="status"
                         onChange={e => isEdit ? setEditData({ ...editData, status: e }) : setAddData({ ...addData, status: e })}
                     >
-                        <Option value="complete">Hoàn thành</Option>
-                        <Option value="processing">Đang xử lý</Option>
-                        <Option value="waiting">Chờ xử lý</Option>
-                        <Option value="error">Lỗi</Option>
+                        <Option value="3">Hoàn thành</Option>
+                        <Option value="2">Đang xử lý</Option>
+                        <Option value="1">Chờ xử lý</Option>
+                        <Option value="0">Lỗi</Option>
                     </Select>
+                </Col>
+                <Col span={11}>
+                    <TitleInput>Mã nhân viên sửa chữa</TitleInput>
+                    <Input
+                        value={isEdit ? editData?.staffId : addData?.staffId}
+                        name="staffId"
+                        placeholder="staffId"
+                        onChange={e => handleValueModal(e)}
+                    />
                 </Col>
                 <Col span={11}>
                     <TitleInput>Loại Dịch Vụ</TitleInput>
                     <Select
-                        value={isEdit ? editData?.deviceType : addData?.deviceType}
+                        value={isEdit ? editData?.services : addData?.services}
                         placeholder="Loại dịch vụ"
                         style={{ width: "100%" }}
-                        name="deviceType"
-                        onChange={e => isEdit ? setEditData({ ...editData, deviceType: e }) : setAddData({ ...addData, deviceType: e })}
+                        name="services"
+                        onChange={e => isEdit ? setEditData({ ...editData, services: e }) : setAddData({ ...addData, services: e })}
                     >
-                        <Option value="airconditioner">Điều Hòa</Option>
-                        <Option value="electricwaterheader">Máy Lọc Nước</Option>
-                        <Option value="refrigerator">Tủ Lạnh</Option>
-                        <Option value="waterfiler">Bình Nóng Lạnh</Option>
+                        <Option value="1">Điều Hòa</Option>
+                        <Option value="2">Máy Lọc Nước</Option>
+                        <Option value="3">Tủ Lạnh</Option>
+                        <Option value="4">Bình Nóng Lạnh</Option>
                     </Select>
                 </Col>
                 <Col span={11}>

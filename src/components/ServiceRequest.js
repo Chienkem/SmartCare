@@ -29,7 +29,7 @@ function ServiceReques() {
     setLoading(true)
     const getData = async () => {
       try {
-        const res = await ApiServiceRequest.get();
+        const res = await ApiServiceRequest.get("1");
         setLoading(false)
         setDataSource(res.rows);
         console.log(res);
@@ -49,18 +49,18 @@ function ServiceReques() {
     },
     {
       title: 'Người dùng',
-      dataIndex: 'nameCustomer',
-      key: 'nameCustomer',
+      dataIndex: 'name',
+      key: 'name',
     },
     {
       title: 'Mã thiết bị',
-      dataIndex: 'deviceCode',
-      key: 'deviceCode',
+      dataIndex: 'deviceId',
+      key: 'deviceId',
     },
     {
       title: 'Loại dịch vụ',
-      dataIndex: 'deviceType',
-      key: 'deviceType',
+      dataIndex: 'services',
+      key: 'services',
       render: (record) => {
         return (
           <DeviceTypeTag deviceType={record} />
@@ -68,9 +68,25 @@ function ServiceReques() {
       }
     },
     {
+      title: 'Số điện thoại',
+      dataIndex: 'customerPhone',
+      key: 'customerPhone',
+    },
+    {
+      title: 'Ghi chú',
+      dataIndex: 'note',
+      key: 'note',
+    },
+
+    {
+      title: 'Mã nhân viên xử lý',
+      dataIndex: 'staffId',
+      key: 'staffId',
+    },
+    {
       title: 'Tỉnh/ Thành phố',
-      dataIndex: 'province',
-      key: 'province',
+      dataIndex: 'city',
+      key: 'city',
     },
     {
       title: 'Quận/ Huyện',
@@ -79,33 +95,13 @@ function ServiceReques() {
     },
     {
       title: 'Xã/ Phường',
-      dataIndex: 'ward',
-      key: 'ward',
+      dataIndex: 'wards',
+      key: 'wards',
     },
     {
       title: 'Địa chỉ chi tiết',
-      dataIndex: 'address',
-      key: 'address',
-    },
-    {
-      title: 'Số điện thoại',
-      dataIndex: 'phoneNumber',
-      key: 'phoneNumber',
-    },
-    {
-      title: 'Ghi chú',
-      dataIndex: 'note',
-      key: 'note',
-    },
-    {
-      title: 'Thời gian',
-      dataIndex: 'time',
-      key: 'time',
-    },
-    {
-      title: 'Mã nhân viên xử lý',
-      dataIndex: 'employeeCode',
-      key: 'employeeCode',
+      dataIndex: 'detailAddress',
+      key: 'detailAddress',
     },
     {
       title: 'Trạng thái',
@@ -138,16 +134,9 @@ function ServiceReques() {
 
   //Lấy dữ liệu input từ form
   const firstDataAdd = {
-    name: null,
     customerPhone: null,
-    city: null,
-    district: null,
-    wards: null,
-    detailAddress: null,
-    deviceCode: null,
-    status: null,
-    deviceType: null,
-    note: null,
+    staffId: null,
+    status:null,
   }
   const [addData, setAddData] = useState(firstDataAdd);
   const [editData, setEditData] = useState(firstDataAdd);
@@ -193,7 +182,7 @@ function ServiceReques() {
             setDataSource((pre) => {
               return pre.map((item) => {
                 if (item.id === editData.id) {
-                  return res;
+                  return editData;
                 }
                 else {
                   return item;
@@ -201,6 +190,7 @@ function ServiceReques() {
               })
             })
           } catch (err) {
+            resetFormData();
             console.log(err);
           }
         }
@@ -209,7 +199,6 @@ function ServiceReques() {
     }
     else {
       setLoadingModal(true)
-      console.log(addData);
       if(checkNullValue(addData)){
         openNotificationWithIcon('warning', 'Thông báo', 'Vui lòng nhập đầy đủ thông tin');
         setLoadingModal(false)
@@ -217,11 +206,13 @@ function ServiceReques() {
       else{
         const postData = async () => {
           try {
-            const res = await ApiServiceRequest.post(addData);
+            const res = await ApiServiceRequest.post("insert",addData);
             resetFormData();
-            setDataSource(pre => [...pre, res])
+            setDataSource(pre => [...pre, res.data])
+            setTotal(pre=>pre+1)
           } catch (err) {
             console.log(err);
+            resetFormData();
           }
         }
         postData();
@@ -229,6 +220,21 @@ function ServiceReques() {
     }
   }
 
+    //thanh search 
+    const handleChangeSearch =(e)=>{
+      const postData = async () => {
+        try {
+         const res = await ApiServiceRequest.post("search",{
+          search: e.target.value
+         })
+         setDataSource(res.rows)
+         setTotal(res.count)
+        } catch (err) { 
+          console.log(err);
+        }
+      }
+      postData();
+    }
   //cancel modal
   const handleCancel = () => {
     resetFormData();
@@ -240,7 +246,21 @@ function ServiceReques() {
   //get page dataSource
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
-
+  const [total,setTotal] = useState(10)
+  //search statusTag
+  const handleChangeStatus = (e)=>{
+    const postData = async () => {
+      try {
+        const res = await ApiServiceRequest.post("status",{status:e});
+        resetFormData();
+        setDataSource(res.rows)
+      } catch (err) {
+        console.log(err);
+        resetFormData();
+      }
+    }
+    postData();
+  }
   return (
     <ContentContainer >
       <HeaderContent>
@@ -249,7 +269,7 @@ function ServiceReques() {
           <Select   //TRạng thái
             style={{ width: 120, marginRight: 30 }}
             placeholder="Trạng thái"
-          // onChange={e => handleChangeWard(e)}
+             onChange={e => handleChangeStatus(e)}
           >
             <Option value="0">Hoàn thành</Option>
             <Option value="1">Đang xử lý</Option>
@@ -264,7 +284,7 @@ function ServiceReques() {
 
           <SearchInput
             placeholder='Tìm kiếm'
-          // onChange={e => handerChangeSearch(e)}
+           onChange={e => handleChangeSearch(e)}
           />
         </div>
       </HeaderContent>
@@ -276,7 +296,7 @@ function ServiceReques() {
         rowKey={record => record.id}
         loading={loading}
         pagination={{
-          total: 100, //số dữ liệu backend trả về
+          total: total, //số dữ liệu backend trả về
           current: page,
           pageSize: pageSize,
           onChange: (page, pageSize) => {

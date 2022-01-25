@@ -35,7 +35,7 @@ const ModalEmployee = ({ isModalVisible, onOk, onCancel, handleValueModal, setAd
                 <Col span={11}>
                     <TitleInput>Địa chỉ email</TitleInput>
                     <Input
-                        value={isEdit ? editData?.email : addData?.email}
+                        value={isEdit ?editData?.email : addData?.email}
                         name="email"
                         placeholder="abc123@gmail.com"
                         onChange={e => handleValueModal(e)}
