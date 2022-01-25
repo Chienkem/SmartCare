@@ -4,6 +4,8 @@ import { notification } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import Cookies from 'js-cookie';
 import ApiLogin from '../api/ApiLogin';
+import jwt_decode from 'jwt-decode';
+import {dashboardWithoutSidebarRoutes} from '../routers/index';
 
 const LogInContainer = styled.div`
     display: flex;
@@ -72,11 +74,22 @@ function LogIn() {
         const postData = async () => {
             try {
                 const res = await ApiLogin.post(account);
-                console.log(res);
                 if(res.message === 'success') {
-                    Cookies.set('token', res.token);
                     localStorage.setItem("token",res.token);
-                    window.location.href = '/';
+                    // chuyển hướng
+                    openNotificationWithIcon('success', 'Đăng nhập thành công');
+                    const userData = jwt_decode(res.token).data;    // lấy dữ liệu user từ token
+                    if(userData.role == 6) {
+                        window.location.href = '/';
+                    }
+                    else {
+                        dashboardWithoutSidebarRoutes.map(({ path, rights}) => {
+                            if(rights == userData.role) {
+                                window.location.href = path;
+                            }
+                        })
+                    }
+
                 }
                 else {
                     openNotificationWithIcon('error', 'Đăng nhập thất bại', 'Tài khoản hoặc mật khẩu không chính xác');

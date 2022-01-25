@@ -4,6 +4,7 @@ import avt from '../assets/img/avatar.jpg'
 import '../assets/style/Sidebar.css'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import {dashboardWithoutSidebarRoutes} from '../routers/index';
+import jwt_decode from 'jwt-decode';
 
 const Flex = styled.div`
     display: flex;
@@ -53,11 +54,14 @@ const SidebarItems = styled.div`
     }
 ` 
 
+const token = localStorage.getItem('token'); 
+const userData = token && jwt_decode(token).data;    // lấy dữ liệu user từ token
+
 const SidebarItem = ({name, to, icon}) => {
 
     return(                          
         <div>
-            {icon ? (        // không có icon là danh mục chính
+            { icon ? (        // không có icon là danh mục chính
                 <NavLink to={to} className={ ({isActive}) => isActive ? "active" : 'inactive'}>
                     <ExclamationCircleOutlined  style={{ fontSize: '15px', color: '#bababa', margin:"3px 15px 0 0" }}/>
                     <Text style={{ fontSize:'13px' }}>{name}</Text>
@@ -66,7 +70,7 @@ const SidebarItem = ({name, to, icon}) => {
                 <NavLink to={to} className={({isActive}) => isActive ? "active" : 'inactive'}>
                     <Text style={{ fontSize:'16px' }}>{name}</Text>
                 </NavLink>
-            )
+                )
             }
         </div>
     )
@@ -80,25 +84,43 @@ function Sidebar(props){
             className={(props.isShow) ? "sidebar-open" : "sidebar-closed"}
         >
             <User style={{padding: "20px"}}>
-                <Avatar src={avt} alt="Avatar" />
+                <Avatar
+                    src={userData.avatar ? userData.avatar : avt}
+                    alt="Avatar"
+                />
                 <div style={{margin:"0px 0 0 10px"}}>
-                    <Title>Admin</Title>
+                    <Title>
+                        {userData.fullName}
+                    </Title>
                     <Flex style={{marginTop: "3px"}}>
                         <IconStatus></IconStatus>
-                        <Status>Online</Status>
+                        <Status>
+                            {userData.role==6 ? "Admin" : "Nhân viên"}
+                        </Status>
                     </Flex>
                 </div>
             </User>
 
             <SidebarItems>
-                {dashboardWithoutSidebarRoutes.map(({name, path, icon}, index) => (
-                    <SidebarItem
-                        key={index}
-                        name={name}
-                        to={path}
-                        icon={icon}
-                    />
-                ))}
+                {dashboardWithoutSidebarRoutes.map(({name, path, icon, rights}, index) => {
+                    if(userData.role == 6)          //admin
+                        return (
+                            <SidebarItem
+                                key={index}
+                                name={name}
+                                to={path}
+                                icon={icon}
+                            />
+                        )
+                    else if(userData.role == rights)    //nhân viên
+                        return (
+                            <SidebarItem
+                                key={index}
+                                name={name}
+                                to={path}
+                            />
+                        )
+                })}
             </SidebarItems>
         </SidebarContainer>
     )
