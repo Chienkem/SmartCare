@@ -23,11 +23,11 @@ export const dashboardWithoutSidebarRoutes = [
         path: "/",
         name: "Yêu cầu dịch vụ",
         icon: false,                 //icon chấm than đầu sidebar
-        rights: 6,             //quyền nhân viên
+        rights: 6,               //quyền nhân viên
         component: ServiceReques,
     },
     {
-        path: "/service",
+        path: null,
         name: "Các dịch vụ",
         icon: false,
         rights: 6,
@@ -108,7 +108,7 @@ export const Routers = () => {
                         <Navbar functionShowSidebar={callBackShowSidebar}/>
                         <Routes>
                             {dashboardWithoutSidebarRoutes.map(({path, component: Component}, index) => (
-                                <Route path={path} key={index} element={< Component/>}/>
+                                path && <Route path={path} key={index} element={< Component/>}/>
                             ))}
                         </Routes>
                     </div>

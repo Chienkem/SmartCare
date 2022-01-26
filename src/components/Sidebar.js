@@ -58,20 +58,27 @@ const token = localStorage.getItem('token');
 const userData = token && jwt_decode(token).data;    // lấy dữ liệu user từ token
 
 const SidebarItem = ({name, to, icon}) => {
-
     return(                          
         <div>
             { icon ? (        // không có icon là danh mục chính
-                <NavLink to={to} className={ ({isActive}) => isActive ? "active" : 'inactive'}>
+                <NavLink to={to} disabale className={ ({isActive}) => isActive ? "active" : 'inactive'}>
                     <ExclamationCircleOutlined  style={{ fontSize: '15px', color: '#bababa', margin:"3px 15px 0 0" }}/>
                     <Text style={{ fontSize:'13px' }}>{name}</Text>
                 </NavLink>)
             : (
-                <NavLink to={to} className={({isActive}) => isActive ? "active" : 'inactive'}>
+                <NavLink disabale to={to} className={({isActive}) => isActive ? "active" : 'inactive'}>
                     <Text style={{ fontSize:'16px' }}>{name}</Text>
                 </NavLink>
                 )
             }
+        </div>
+    )
+}
+
+const SidebarItemTitle = ({name}) => {
+    return(
+        <div className='inactive'>
+            <Text style={{ fontSize:'16px' }}>{name}</Text>
         </div>
     )
 }
@@ -103,7 +110,7 @@ function Sidebar(props){
 
             <SidebarItems>
                 {dashboardWithoutSidebarRoutes.map(({name, path, icon, rights}, index) => {
-                    if(userData.role == 6)          //admin
+                    if(userData.role == 6 && path)          //admin
                         return (
                             <SidebarItem
                                 key={index}
@@ -112,7 +119,10 @@ function Sidebar(props){
                                 icon={icon}
                             />
                         )
-                    else if(userData.role == rights)    //nhân viên
+                    else if(userData.role == 6 && path===null)
+                        return <SidebarItemTitle name={name} key={index}/>
+
+                    else if(userData.role == rights && path)    //nhân viên
                         return (
                             <SidebarItem
                                 key={index}
