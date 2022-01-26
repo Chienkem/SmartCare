@@ -6,7 +6,7 @@ import { TitleInput, ContentContainer, StatusTag, SearchInput, HeaderContent,Dev
 import ModalService from './Modal/ModalSevices';
 import { checkNullValue } from '../action/checkNullValue';
 import FilterAddress from "../action/FilterAddress";
-import ApiService from '../api/ApiService';
+import ApiServicAirConditoner from '../api/ApiServicAirConditoner';
 const { Option } = Select;
 
 function AirConditioner(){
@@ -25,7 +25,7 @@ function AirConditioner(){
    useEffect(() => {
     const postData = async () => {
       try {
-        const res = await ApiService.post("1",{services:1});
+        const res = await ApiServicAirConditoner.post();
       setDataSource(res.rows)
       setTotal(res.count)
       } catch (err) {
@@ -175,7 +175,7 @@ const handleOk = () => {
     else{
       const putData = async () => {
         try {
-          const res = await ApiService.put(editData.id, editData);
+          const res = await ApiServicAirConditoner.put(editData.id, editData);
           resetFormData()
           setDataSource((pre) => {
             return pre.map((item) => {
@@ -204,7 +204,7 @@ const handleOk = () => {
     // else{
     //   const postData = async () => {
     //     try {
-    //       const res = await ApiService.post("insert",addData);
+    //       const res = await ApiServicAirConditoner.post("insert",addData);
     //       resetFormData();
     //       setDataSource(pre => [...pre, res.data])
     //       setTotal(pre=>pre+1)
@@ -221,7 +221,7 @@ const handleOk = () => {
 const handleChangeSearch =(e)=>{
   const postData = async () => {
     try {
-     const res = await ApiService.post("search",{
+     const res = await ApiServicAirConditoner.post("search",page,{
       search: e.target.value
      })
      setDataSource(res.rows)
@@ -248,7 +248,7 @@ const [loadingModal, setLoadingModal] = useState(false)
 const handleChangeStatus = (e)=>{
   const postData = async () => {
     try {
-      const res = await ApiService.post("status",{status:e});
+      const res = await ApiServicAirConditoner.post("status",{status:e});
       resetFormData();
       setDataSource(res.rows)
     } catch (err) {
@@ -268,15 +268,16 @@ return (
             placeholder="Trạng thái"
              onChange={e => handleChangeStatus(e)}
           >
-            <Option value="0">Hoàn thành</Option>
-            <Option value="1">Đang xử lý</Option>
-            <Option value="2">Chờ xử lý</Option>
-            <Option value="3">Lỗi</Option>
+            <Option value="3">Hoàn thành</Option>
+            <Option value="2">Đang xử lý</Option>
+            <Option value="1">Chờ xử lý</Option>
+            <Option value="0">Lỗi</Option>
           </Select>
 
           <FilterAddress 
-            ApiComponent={ApiService}
+            ApiComponent={ApiServicAirConditoner}
             setDataSource={setDataSource}
+            page={page}
           />
 
           <SearchInput
@@ -301,11 +302,10 @@ return (
           setPageSize(pageSize)
           const postData = async () => {
             try {
-              const res = await ApiService.post(page,{services:1});
+              const res = await ApiServicAirConditoner.post(page);
               setDataSource(res.rows)
               setTotal(res.count)
             } catch (err) {
-      
               resetFormData();
             }
           }

@@ -1,6 +1,6 @@
 import axiosClient from "./axiosClient";
 
-const ApiService= {
+const apiServiceRefrigerator= {
     get: (page="") => {
         const url = `/request/?page=${page}`;
         return axiosClient.get(url);
@@ -12,10 +12,10 @@ const ApiService= {
     },
 
     post: (param="",data) => {
-        const url = `/services/dich-vu/${param}`;
+        const url = `/services/tu-lanh/${param}`;
         return axiosClient.post(url, data);
     },
 
 }
 
-export default ApiService;
+export default apiServiceRefrigerator;

@@ -23,7 +23,7 @@ function FilterAddress(props) {
         setProvince(nameProvince[0].name);
         const postData = async () => {
             try {
-                const res = await props.ApiComponent.post("city", {city: nameProvince[0].name});
+                const res = await props.ApiComponent.post("city",props.page, {city: nameProvince[0].name});
                 console.log(res);
                 props.setDataSource(res.rows);
             }
@@ -47,7 +47,7 @@ function FilterAddress(props) {
         setDistrict(nameDistrict[0].name);
         const postData = async () => {
             try {
-                const res = await props.ApiComponent.post("district",
+                const res = await props.ApiComponent.post("district",props.page,
                     {district: nameDistrict[0].name,
                     city: province}
                 );
@@ -71,7 +71,7 @@ function FilterAddress(props) {
         const nameWard = listWard.filter(item => item.code === e);
         const postData = async () => {
             try {
-                const res = await props.ApiComponent.post("wards",
+                const res = await props.ApiComponent.post("wards",props.page,
                     {wards: nameWard[0].name,
                     district: district,
                     city: province}

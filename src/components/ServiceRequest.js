@@ -271,10 +271,10 @@ function ServiceReques() {
             placeholder="Trạng thái"
              onChange={e => handleChangeStatus(e)}
           >
-            <Option value="0">Hoàn thành</Option>
-            <Option value="1">Đang xử lý</Option>
-            <Option value="2">Chờ xử lý</Option>
-            <Option value="3">Lỗi</Option>
+            <Option value="3">Hoàn thành</Option>
+            <Option value="2">Đang xử lý</Option>
+            <Option value="1">Chờ xử lý</Option>
+            <Option value="0">Lỗi</Option>
           </Select>
 
           <FilterAddress 

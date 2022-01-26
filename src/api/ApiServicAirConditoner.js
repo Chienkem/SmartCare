@@ -1,6 +1,6 @@
 import axiosClient from "./axiosClient";
 
-const ApiService= {
+const ApiServiceAirConditioner= {
     get: (page="") => {
         const url = `/request/?page=${page}`;
         return axiosClient.get(url);
@@ -11,11 +11,11 @@ const ApiService= {
         return axiosClient.put(url, data);
     },
 
-    post: (param="",data) => {
-        const url = `/services/dich-vu/${param}`;
+    post: (param="",page,data) => {
+        const url = `/services/dieu-hoa/${param}`;
         return axiosClient.post(url, data);
     },
 
 }
 
-export default ApiService;
+export default ApiServiceAirConditioner;
