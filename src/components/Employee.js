@@ -22,7 +22,6 @@ function Employee() {
   //loading table mounted
   const [loading, setLoading] = useState(false)
   // lấy dữ liệu từ server
-
   const [dataSource, setDataSource] = useState([]);
   useEffect(() => {
     setLoading(true)

@@ -6,6 +6,21 @@ const { Option } = Select;
 
 function FilterAddress(props) {
 
+    // lấy tất cả thông tin khi chưa filter
+    const getAllData = () => {
+        const getData = async () => {
+            try {
+                const res = await props.ApiComponent.get('1');
+                console.log(res);
+                props.setDataSource(res.rows);
+            }
+            catch(err){
+                console.log(err);
+            }
+        }
+        getData();
+    }
+
     // get list tỉnh thành
     const [listProvince, setListProvince] = useState([]);
     const getListProvince = () => {
@@ -18,12 +33,10 @@ function FilterAddress(props) {
     // Chọn tỉnh thành + get list quận huyện
     const [listDistrict, setListDistrict] = useState([]);
     const [province, setProvince] = useState();
-    const chooseProvince = (e) => {
-        const nameProvince = listProvince.filter(item => item.code === e);
-        setProvince(nameProvince[0].name);
+    const getDataDistrict = (province) => {
         const postData = async () => {
             try {
-                const res = await props.ApiComponent.post("city", {city: nameProvince[0].name});
+                const res = await props.ApiComponent.post("city", {city: province});
                 console.log(res);
                 props.setDataSource(res.rows);
             }
@@ -32,7 +45,11 @@ function FilterAddress(props) {
             }
         }
         postData();
-
+    }
+    const chooseProvince = (e) => {
+        const nameProvince = listProvince.filter(item => item.code === e);
+        setProvince(nameProvince[0].name);
+        getDataDistrict(nameProvince[0].name);
         axios.get(`https://provinces.open-api.vn/api/p/${e}?depth=2`)
         .then(res => {
             setListDistrict(res.data.districts);
@@ -42,13 +59,11 @@ function FilterAddress(props) {
     // Chọn quận huyện + get list phường xã
     const [listWard, setListWard] = useState([]);
     const [district, setDistrict] = useState();
-    const chooseDistrict = (e) => {
-        const nameDistrict = listDistrict.filter(item => item.code === e);
-        setDistrict(nameDistrict[0].name);
+    const getDataWard = (district) => {
         const postData = async () => {
             try {
                 const res = await props.ApiComponent.post("district",
-                    {district: nameDistrict[0].name,
+                    {district: district,
                     city: province}
                 );
                 console.log(res);
@@ -59,7 +74,11 @@ function FilterAddress(props) {
             }
         }
         postData();
-
+    }
+    const chooseDistrict = (e) => {
+        const nameDistrict = listDistrict.filter(item => item.code === e);
+        setDistrict(nameDistrict[0].name);
+        getDataWard(nameDistrict[0].name);
         axios.get(`https://provinces.open-api.vn/api/d/${e}?depth=2`)
         .then(res => {
             setListWard(res.data.wards);
@@ -94,6 +113,13 @@ function FilterAddress(props) {
                 placeholder="Tỉnh/ Thành phố"
                 onClick={e => getListProvince(e)}
                 onChange={e => chooseProvince(e)}
+                onClear={() => {
+                    getAllData();
+                    setProvince('');
+                    setDistrict('');
+                    setListDistrict([]);
+                    setListWard([]);}
+                }
             >
                 {listProvince.map(item => (
                     <Option value={item.code} >{item.name}</Option>
@@ -102,9 +128,15 @@ function FilterAddress(props) {
 
             <Select
                 allowClear
+                disabled={!province}
                 style={{ width: 150 }}
                 placeholder="Quận/ Huyện"
                 onChange={e => chooseDistrict(e)}
+                onClear={() => {
+                    getDataDistrict(province);
+                    setDistrict('');
+                    setListWard([]);
+                }}
             >
                 {listDistrict.map(item => (
                     <Option value={item.code} >{item.name}</Option>
@@ -113,9 +145,11 @@ function FilterAddress(props) {
 
             <Select
                 allowClear
+                disabled={!district}
                 style={{ width: 150 }}
                 placeholder="Phường/ Xã"
                 onChange={e => chooseWard(e)}
+                onClear={() => { getDataWard(district)}}
             >
                 {listWard.map(item => (
                     <Option value={item.code} >{item.name}</Option>

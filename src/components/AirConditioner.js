@@ -26,6 +26,7 @@ function AirConditioner(){
     const postData = async () => {
       try {
         const res = await ApiServicAirConditoner.post();
+        console.log(res)
       setDataSource(res.rows)
       setTotal(res.count)
       } catch (err) {

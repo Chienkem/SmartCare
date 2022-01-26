@@ -110,8 +110,7 @@ function Customer() {
     city: null,
     district: null,
     wards: null,
-    detailAddress: null,
-    deviceId: null,
+    detailAddress: null
   }
   const [addData, setAddData] = useState(firstDataForm);
   const [editData, setEditData] = useState(firstDataForm);
