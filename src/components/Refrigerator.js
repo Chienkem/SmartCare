@@ -25,7 +25,7 @@ function Refrigerator(){
    useEffect(() => {
     const postData = async () => {
       try {
-        const res = await ApiService.post("1",{services:1});
+        const res = await ApiService.post("1",{services:3});
       setDataSource(res.rows)
       setTotal(res.count)
       } catch (err) {
