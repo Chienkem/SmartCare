@@ -8,9 +8,9 @@ function FilterAddress(props) {
 
     // lấy tất cả thông tin khi chưa filter
     const getAllData = () => {
-        const getData = async () => {
+        const postData = async () => {
             try {
-                const res = await props.ApiComponent.get('1');
+                const res = await props.ApiComponent.clear();
                 console.log(res);
                 props.setDataSource(res.rows);
             }
@@ -18,7 +18,7 @@ function FilterAddress(props) {
                 console.log(err);
             }
         }
-        getData();
+        postData();
     }
 
     // get list tỉnh thành

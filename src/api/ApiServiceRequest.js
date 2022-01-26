@@ -15,7 +15,10 @@ const ApiServiceRequest = {
         const url = `/request/${param}`;
         return axiosClient.post(url, data);
     },
-
+    clear: (page="1") => {
+        const url = `/request/?page=${page}`;
+        return axiosClient.get(url);
+    }
 }
 
 export default ApiServiceRequest;

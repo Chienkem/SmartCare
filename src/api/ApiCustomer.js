@@ -19,8 +19,11 @@ const ApiCustomer = {
     delete: (id) => {
         const url = `/customer/delete/${id}`;
         return axiosClient.delete(url);
-    }
-
+    },
+    clear: (page="1") => {
+        const url = `/customer/?page=${page}`;
+        return axiosClient.get(url);
+    },
 }
 
 export default ApiCustomer;

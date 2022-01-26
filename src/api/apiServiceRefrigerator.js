@@ -15,7 +15,10 @@ const apiServiceRefrigerator= {
         const url = `/services/tu-lanh/${param}`;
         return axiosClient.post(url, data);
     },
-
+    clear: () => {
+        const url = `/services/tu-lanh/`;
+        return axiosClient.post(url);
+    },
 }
 
 export default apiServiceRefrigerator;

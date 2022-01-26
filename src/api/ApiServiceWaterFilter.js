@@ -12,10 +12,13 @@ const ApiServiceElectricHeater= {
     },
 
     post: (param="",data) => {
-        const url = `/services/binh-nong-lanh/${param}`;
+        const url = `/services/may-loc-nuoc/${param}`;
         return axiosClient.post(url, data);
     },
-
+    clear: () => {
+        const url = `/services/may-loc-nuoc`;
+        return axiosClient.post(url);
+    },
 }
 
 export default ApiServiceElectricHeater;
