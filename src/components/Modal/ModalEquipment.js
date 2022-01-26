@@ -38,7 +38,21 @@ const ModalEquipment = ({ isModalVisible, onOk, onCancel, handleValueModal, setA
                         onChange={e => handleValueModal(e)}
                     />
                 </Col>
-               
+                <Col span={11}>
+                    <TitleInput>Trạng thái</TitleInput>
+                    <Select
+                        value={isEdit ? editData?.statusDevice : addData?.statusDevice}
+                        placeholder="Trạng thái"
+                        style={{ width: "100%" }}
+                        name="statusDevice"
+                        onChange={e => isEdit ? setEditData({ ...editData, statusDevice: e }) : setAddData({ ...addData, statusDevice: e })}
+                    >
+                        <Option value="3">Hoàn thành</Option>
+                        <Option value="2">Đang xử lý</Option>
+                        <Option value="1">Chờ xử lý</Option>
+                        <Option value="0">Lỗi</Option>
+                    </Select>
+                </Col>
             </Row>
         </Modal>
     </div>;

@@ -121,6 +121,7 @@ function LogIn() {
                         <LockOutlined style={{fontSize: '25px'}}/>
                     </LoginIcon>
                     <LoginInput
+                        type="password"
                         name="password"
                         placeholder="Nhập mật khẩu"
                         onChange={e => handleChangeAccount(e)}

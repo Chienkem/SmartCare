@@ -144,6 +144,7 @@ function Customer() {
 
   //reset Data 
   const resetFormData = () => {
+    setAvartar("")
     setIsModalVisible(false);
     isEdit ? setIsEdit(firstDataForm) : setAddData(firstDataForm);
   }
