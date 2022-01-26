@@ -50,15 +50,7 @@ function ModalCustomer({ isModalVisible, onOk, onCancel, handleValueModal, addDa
                         valueAddress = {isEdit ? editData : addData}
                     />
                 </Col>
-                <Col span={11}>
-                    <TitleInput>Mã thiết bị</TitleInput>
-                    <Input
-                        value={isEdit?editData?.deviceId:addData?.deviceId}
-                        name="deviceId"
-                        placeholder="abc123"
-                        onChange={e => handleValueModal(e)}
-                    />
-                </Col>
+              
                 <Col span={11}>
                     <InputImage 
                         title="Ảnh đại diện" 
