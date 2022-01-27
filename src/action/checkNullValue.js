@@ -1,6 +1,5 @@
 export const checkNullValue = (object) => {
     const value = Object.values(object);
-    console.log(object)
     if(value.length === 0){
         return true
     }

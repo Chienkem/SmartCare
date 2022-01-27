@@ -1,11 +1,12 @@
 import React from 'react';
 import { Table, Modal, Button, Row, Col, Select, Input } from 'antd';
+import avt from '../../assets/img/avatar.jpg'
 import { TitleInput, InputImage } from "../custom/Customize"
 import GetAddress from '../../action/GetAddress';
 
 const { Option } = Select
 
-const ModalEmployee = ({ isModalVisible, onOk, onCancel, handleValueModal, setAddData, addData, isEdit, editData, loading, setEditData, avatar }) => {
+const ModalEmployee = ({ isModalVisible, onOk, onCancel, handleValueModal, setAddData, addData, isEdit, editData, loading, setEditData, urlAvatar, handleAvatar }) => {
     const title = isEdit ? "Chỉnh sửa thông tin nhân viên" : "Thêm nhân viên"
     return <div>
         <Modal
@@ -91,9 +92,10 @@ const ModalEmployee = ({ isModalVisible, onOk, onCancel, handleValueModal, setAd
                 </Col>
                 <Col span={11}>
                     <InputImage
-                        title="Ảnh đại diện"  
-                        onChange={handleValueModal}
-                        avatar={avatar}  
+                        title="Ảnh đại diện"
+                        name = "avatar"
+                        onChange={e => handleAvatar(e.target.files[0])}
+                        avatar={urlAvatar}  
                     />
                 </Col>
             </Row>

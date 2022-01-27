@@ -92,7 +92,7 @@ function Sidebar(props){
         >
             <User style={{padding: "20px"}}>
                 <Avatar
-                    src={userData.avatar ? userData.avatar : avt}
+                    src={userData.avatar ? `${process.env.REACT_APP_API_URL_IMAGE}/${userData.avatar}` : avt}
                     alt="Avatar"
                 />
                 <div style={{margin:"0px 0 0 10px"}}>

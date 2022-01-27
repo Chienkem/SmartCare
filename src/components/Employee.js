@@ -95,8 +95,9 @@ function Employee() {
             <EditOutlined
               style={{ color: "#45A4FC" }}
               onClick={() => {
-                setEditData(record)
-                showModalEdit()
+                setEditData(record);
+                showModalEdit();
+                setUrlAvatar(`${process.env.REACT_APP_API_URL_IMAGE}/${record.avatar}`)
               }}
             />
             <DeleteOutlined
@@ -122,18 +123,18 @@ function Employee() {
   }
   const [addData, setAddData] = useState(firstDataForm);
   const [editData, setEditData] = useState(firstDataForm);
-  const [avatar,setAvartar] = useState("")
+  const [avatar, setAvatar] = useState(null);
+  const [urlAvatar,setUrlAvatar] = useState("")
   const handleValueModal = (e) => {
-    const file= e.target?.files?e.target.files[0] : null
     const name = e.target.name;
     const value = e.target.value;
-    !!file && setAvartar(URL.createObjectURL(file))
-    // if(!!file){
-    //   addData.append("file",file)
-    //   addData.append("avatar",addData.name)
-    // }
     isEdit ? setEditData({ ...editData, [name]: value}) :
       setAddData({...addData, [name]: value});
+  }
+  const handleAvatar = (e) => {
+    setAvatar(e)
+    setUrlAvatar(URL.createObjectURL(e))
+    // console.log(URL.createObjectURL(e))
   }
 
   // Modal
@@ -152,7 +153,8 @@ function Employee() {
 
   //reset Data 
   const resetFormData = () => {
-    setAvartar("")
+    setAvatar(null);
+    setUrlAvatar("");
     setIsModalVisible(false);
     isEdit ? setIsEdit(firstDataForm) : setAddData(firstDataForm);
   }
@@ -166,9 +168,21 @@ function Employee() {
         setLoadingModal(false)
       }
       else{
+        const formData = new FormData();
+        formData.append("fullName", editData.fullName);
+        formData.append("email", editData.email);
+        formData.append("phoneNumber", editData.phoneNumber);
+        formData.append("password", editData.password);
+        formData.append("staffId", editData.staffId);
+        formData.append("role", editData.role);
+        formData.append("city", editData.city);
+        formData.append("district", editData.district);
+        formData.append("wards", editData.wards);
+        formData.append("avatar", avatar, avatar.name);
+
         const putData = async () => {
           try {
-            const res = await ApiEmployee.put(editData.id, editData);
+            const res = await ApiEmployee.put(editData.id, formData);
             resetFormData()
             setDataSource((pre) => {
               return pre.map((item) => {
@@ -194,9 +208,21 @@ function Employee() {
         setLoadingModal(false)
       }
       else{
+        const formData = new FormData();
+        formData.append("fullName", addData.fullName);
+        formData.append("email", addData.email);
+        formData.append("phoneNumber", addData.phoneNumber);
+        formData.append("password", addData.password);
+        formData.append("staffId", addData.staffId);
+        formData.append("role", addData.role);
+        formData.append("city", addData.city);
+        formData.append("district", addData.district);
+        formData.append("wards", addData.wards);
+        formData.append("avatar", avatar, avatar.name);
+
         const postData = async () => {
           try {
-          const res = await ApiEmployee.post("insert",addData)
+          const res = await ApiEmployee.post("insert", formData);
             resetFormData();
             setDataSource(pre => [...pre, res])
             setTotal(pre => pre+1)
@@ -314,7 +340,8 @@ function Employee() {
         isEdit={isEdit}
         loading={loadingModal}
         setEditData={setEditData} 
-        avatar={avatar}
+        urlAvatar={urlAvatar}
+        handleAvatar={handleAvatar}
       />
 
     </ContentContainer>

@@ -5,7 +5,7 @@ import GetAddress from '../../action/GetAddress';
 
 const { Option } = Select
 
-function ModalCustomer({ isModalVisible, onOk, onCancel, handleValueModal, addData,isEdit,editData,loading, avatar, setAddData, setEditData, setAvatar }) {
+function ModalCustomer({ isModalVisible, onOk, onCancel, handleValueModal, addData,isEdit,editData,loading, avatar, setAddData, setEditData, urlAvatar, handleAvatar }) {
 
     const title = isEdit ? "Chỉnh sửa thông tin khách hàng" : "Thêm khách hàng";
 
@@ -53,9 +53,10 @@ function ModalCustomer({ isModalVisible, onOk, onCancel, handleValueModal, addDa
               
                 <Col span={11}>
                     <InputImage 
-                        title="Ảnh đại diện" 
-                        onChange={handleValueModal}
-                        avatar={avatar}
+                        title="Ảnh đại diện"
+                        name="avatar"
+                        onChange={e => handleAvatar(e.target.files[0])}
+                        avatar={urlAvatar}
                     />
     
                 </Col>

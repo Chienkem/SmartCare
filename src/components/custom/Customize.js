@@ -18,7 +18,7 @@ const InputFileContainer = styled.label`
     cursor: pointer;   
     text-align: center;
 ` 
-export const InputImage = ({title,onChange,avatar}) => {
+export const InputImage = ({title,onChange,avatar, name}) => {
     return(
         <div>
             <TitleInput>{title}</TitleInput>
@@ -27,7 +27,7 @@ export const InputImage = ({title,onChange,avatar}) => {
                 <PlusOutlined style={{fontSize: "20px"}}/>
                 Chọn ảnh
             </InputFileContainer>
-            <input type="file" id="input-image" name ="avatar" onChange={onChange} style={{display: "none"}}/>
+            <input type="file" id="input-image" name ={name} onChange={onChange} style={{display: "none"}}/>
         </div>
     )
 }

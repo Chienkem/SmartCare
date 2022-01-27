@@ -92,6 +92,7 @@ function Customer() {
               onClick={() => {
                 setEditData(record)
                 showModalEdit()
+                setUrlAvatar(`${process.env.REACT_APP_API_URL_IMAGE}/${record.avatar}`)
               }}
             />
             <DeleteOutlined
@@ -114,18 +115,17 @@ function Customer() {
   }
   const [addData, setAddData] = useState(firstDataForm);
   const [editData, setEditData] = useState(firstDataForm);
-  const [avatar,setAvartar] = useState("")
+  const [urlAvatar, setUrlAvatar] = useState(null);
+  const [avatar, setAvatar] = useState(null);
   const handleValueModal = (e) => {
-    const file= e.target?.files?e.target.files[0] : null
     const name = e.target.name;
     const value = e.target.value;
-    !!file && setAvartar(URL.createObjectURL(file))
-    // if(!!file){
-    //   addData.append("file",file)
-    //   addData.append("avatar",addData.name)
-    // }
     isEdit ? setEditData({ ...editData, [name]: value}) :
       setAddData({...addData, [name]: value});
+  }
+  const handleAvatar = (e) => {
+    setUrlAvatar(URL.createObjectURL(e));
+    setAvatar(e);
   }
 
   // Modal
@@ -144,7 +144,8 @@ function Customer() {
 
   //reset Data 
   const resetFormData = () => {
-    setAvartar("")
+    setUrlAvatar(null);
+    setAvatar(null);
     setIsModalVisible(false);
     isEdit ? setIsEdit(firstDataForm) : setAddData(firstDataForm);
   }
@@ -158,9 +159,18 @@ function Customer() {
         setLoadingModal(false)
       }
       else{
+        const formData = new FormData();
+        formData.append("name", editData.name);
+        formData.append("phone", editData.phone);
+        formData.append("city", editData.city);
+        formData.append("district", editData.district);
+        formData.append("wards", editData.wards);
+        formData.append("detailAddress", editData.detailAddress);
+        formData.append("avatar", avatar, avatar.name);
+
         const putData = async () => {
           try {
-            const res = await ApiCustomer.put(editData.id, editData);
+            const res = await ApiCustomer.put(editData.id, formData);
             resetFormData()
             setDataSource((pre) => {
               return pre.map((item) => {
@@ -186,9 +196,18 @@ function Customer() {
         setLoadingModal(false)
       }
       else{
+        const formData = new FormData();
+        formData.append("name", addData.name);
+        formData.append("phone", addData.phone);
+        formData.append("city", addData.city);
+        formData.append("district", addData.district);
+        formData.append("wards", addData.wards);
+        formData.append("detailAddress", addData.detailAddress);
+        formData.append("avatar", avatar, avatar.name);
+
         const postData = async () => {
           try {
-          const res = await ApiCustomer.post("insert",addData)
+          const res = await ApiCustomer.post("insert",formData);
             resetFormData();
             setDataSource(pre => [...pre, res])
             setTotal(pre => pre+1)
@@ -306,7 +325,8 @@ function Customer() {
         isEdit={isEdit}
         loading={loadingModal}
         setEditData={setEditData} 
-        avatar={avatar}
+        urlAvatar={urlAvatar}
+        handleAvatar={handleAvatar}
       />
 
     </ContentContainer>
