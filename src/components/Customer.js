@@ -195,6 +195,10 @@ function Customer() {
         openNotificationWithIcon('warning', 'Thông báo', 'Vui lòng nhập đầy đủ thông tin');
         setLoadingModal(false)
       }
+      else if(urlAvatar === null){
+        openNotificationWithIcon('warning', 'Thông báo', 'Vui lòng chọn ảnh đại diện');
+        setLoadingModal(false)
+      }
       else{
         const formData = new FormData();
         formData.append("name", addData.name);

@@ -208,6 +208,10 @@ function Employee() {
         openNotificationWithIcon('warning', 'Thông báo', 'Vui lòng nhập đầy đủ thông tin');
         setLoadingModal(false)
       }
+      else if(avatar === null){
+        openNotificationWithIcon('warning', 'Thông báo', 'Vui lòng chọn ảnh đại diện');
+        setLoadingModal(false)
+      }
       else{
         const formData = new FormData();
         formData.append("fullName", addData.fullName);

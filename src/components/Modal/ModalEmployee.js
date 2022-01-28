@@ -63,7 +63,7 @@ const ModalEmployee = ({ isModalVisible, onOk, onCancel, handleValueModal, setAd
                 <Col span={11}>
                     <TitleInput>Mã nhân viên</TitleInput>
                     <Input
-                        disabled
+                        disabled={isEdit ? true : false}
                         value={isEdit ? editData?.staffId : addData?.staffId}
                         name="staffId"
                         placeholder="Mã nhân viên"
