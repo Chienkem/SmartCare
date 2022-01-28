@@ -47,8 +47,8 @@ const ModalEquipment = ({ isModalVisible, onOk, onCancel, handleValueModal, setA
                         name="statusDevice"
                         onChange={e => isEdit ? setEditData({ ...editData, statusDevice: e }) : setAddData({ ...addData, statusDevice: e })}
                     >
-                        <Option value="3">Hoàn thành</Option>
-                        <Option value="2">Đang xử lý</Option>
+                        <Option value="3">On</Option>
+                        <Option value="2">Off</Option>
                         <Option value="1">Chờ xử lý</Option>
                         <Option value="0">Lỗi</Option>
                     </Select>

@@ -51,11 +51,11 @@ function Customer() {
       dataIndex: 'name',
       key: 'name',
     },
-    {
-      title: 'Mã thiết bị',
-      dataIndex: 'deviceId',
-      key: 'deviceId',
-    },
+    // {
+    //   title: 'Mã thiết bị',
+    //   dataIndex: 'deviceId',
+    //   key: 'deviceId',
+    // },
     {
       title: 'Tỉnh/ Thành phố',
       dataIndex: 'city',
@@ -203,7 +203,7 @@ function Customer() {
         formData.append("district", addData.district);
         formData.append("wards", addData.wards);
         formData.append("detailAddress", addData.detailAddress);
-        formData.append("avatar", avatar, avatar.name);
+        avatar ? formData.append("avatar", avatar, avatar.name) : formData.append("avatar", null);
 
         const postData = async () => {
           try {

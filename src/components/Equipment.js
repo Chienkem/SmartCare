@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Table, Modal, Button, Row, Col, Select, Input,notification } from 'antd';
 import { DeleteOutlined, EditOutlined, ExclamationCircleOutlined} from '@ant-design/icons';
-import { TitleInput, ContentContainer, StatusTag, SearchInput, HeaderContent } from './custom/Customize';
+import { TitleInput, ContentContainer, StatusEquimentTag, SearchInput, HeaderContent } from './custom/Customize';
 import ModalEquipment from './Modal/ModalEquipment';
 import ApiEquipment from '../api/ApiEquipment';
 import { checkNullValue } from '../action/checkNullValue';
@@ -65,7 +65,7 @@ useEffect(() => {
         dataIndex: 'statusDevice',
         render: (record) => {
           return(
-            <StatusTag status={record}/>
+            <StatusEquimentTag status={record}/>
           )
         }
       },

@@ -2,12 +2,12 @@ import axiosClient from "./axiosClient";
 
 const apiServiceRefrigerator= {
     get: (page="") => {
-        const url = `/request/?page=${page}`;
+        const url = `/request/tu-lanh/?page=${page}`;
         return axiosClient.get(url);
     },
 
     put: (id, data) => {
-        const url = `/request/edit/${id}`;
+        const url = `/request/tu-lanh/edit/${id}`;
         return axiosClient.put(url, data);
     },
 

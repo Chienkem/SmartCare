@@ -67,6 +67,29 @@ export const StatusTag = ({status}) => {
     )
 }
 
+export const StatusEquimentTag = ({status}) => {
+    if(status === "2")
+        return(
+            <Tag color="#FFA500" style={{width:"80px", textAlign:"center"}}>Off</Tag>
+        )
+    else if(status === "3")
+        return(
+            <Tag color="#31A24C" style={{width:"80px", textAlign:"center"}}>On</Tag>
+        )
+    else if(status === "0")
+        return(
+            <Tag color="#FF0000" style={{width:"80px", textAlign:"center"}}>Lỗi</Tag>
+        )
+    else if(status === "1"){
+        return(
+            <Tag color="#45A4FC" style={{width:"80px", textAlign:"center"}}>Chờ xử lý</Tag>
+        )
+    }
+    else return(
+        <div>Không xác định</div>
+    )
+}
+
 export const DeviceTypeTag = ({deviceType}) => {
     if(deviceType === "1")
         return(
