@@ -166,7 +166,7 @@ function Customer() {
         formData.append("district", editData.district);
         formData.append("wards", editData.wards);
         formData.append("detailAddress", editData.detailAddress);
-        formData.append("avatar", avatar, avatar.name);
+        avatar && formData.append("avatar", avatar, avatar.name);
 
         const putData = async () => {
           try {

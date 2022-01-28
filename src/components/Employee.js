@@ -178,7 +178,8 @@ function Employee() {
         formData.append("city", editData.city);
         formData.append("district", editData.district);
         formData.append("wards", editData.wards);
-        formData.append("avatar", avatar, avatar.name);
+        avatar && formData.append("avatar", avatar, avatar.name);
+        console.log('edit')
 
         const putData = async () => {
           try {
