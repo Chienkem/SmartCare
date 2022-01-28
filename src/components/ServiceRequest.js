@@ -31,6 +31,7 @@ function ServiceReques() {
       try {
         const res = await ApiServiceRequest.get("1");
         setLoading(false)
+        setTotal(res.count)
         setDataSource(res.rows);
         console.log(res);
       } catch (err) {
